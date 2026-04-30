@@ -1,7 +1,10 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env from project root
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(dotenv_path=env_path, override=True)
 
 # API Configuration
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
@@ -38,6 +41,6 @@ if not ANTHROPIC_API_KEY:
     raise ValueError("ANTHROPIC_API_KEY not set. Please configure it in .env file.")
 
 if VERBOSE:
-    print(f"✓ Configuration loaded")
+    print(f"[OK] Configuration loaded")
     print(f"  Model: {MODEL}")
     print(f"  Langfuse: {'enabled' if LANGFUSE_ENABLED else 'disabled'}")

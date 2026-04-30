@@ -5,38 +5,21 @@ Single-agent loop: Think → Act → Observe → Repeat
 """
 
 from typing import Any
-from langgraph.graph import StateGraph, END
-from langgraph.prebuilt import create_react_agent
+from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 from anthropic import Anthropic
 
-from src.config import ANTHROPIC_API_KEY, MODEL, SYSTEM_PROMPT, VERBOSE
-from src.tools import TOOLS
+from .config import ANTHROPIC_API_KEY, MODEL, VERBOSE
+from .tools import TOOLS
 
 
 def create_agent():
-    """
-    Create and return the Standup Summarizer agent.
-
-    Uses LangGraph's ReAct pattern: Reasoning + Acting in a loop.
-    """
-
-    # Initialize Anthropic client
-    client = Anthropic(api_key=ANTHROPIC_API_KEY)
-
-    # Create the agent using LangGraph's prebuilt React agent
-    # (This is a simplified version; full implementation would define custom state schema)
-    agent = create_react_agent(
-        model=client,
-        tools=TOOLS,
-        system_prompt=SYSTEM_PROMPT,
-    )
-
-    return agent
+    """Create Anthropic client for the agent."""
+    return Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
 def run_agent(transcript: str) -> dict:
     """
-    Run the agent on a standup transcript.
+    Run the agent on a standup transcript using Anthropic API directly.
 
     Args:
         transcript: Raw standup meeting transcript
@@ -45,7 +28,7 @@ def run_agent(transcript: str) -> dict:
         dict with agent output and metadata
     """
 
-    agent = create_agent()
+    client = create_agent()
 
     if VERBOSE:
         print(f"\n{'='*60}")
@@ -56,36 +39,65 @@ def run_agent(transcript: str) -> dict:
         print(f"{'='*60}\n")
 
     # Prepare the prompt
-    prompt = f"""Analyze this standup transcript and provide a structured summary.
+    system_prompt = """You are a Standup Meeting Summarizer Agent. Your goal is to extract and structure information from standup transcripts.
+
+Process the standup transcript and provide a structured summary with:
+1. Done - what the team completed
+2. In Progress - current work
+3. Blockers - obstacles with owners
+4. Actions - follow-ups with assignees
+
+Output as clean JSON."""
+
+    user_prompt = f"""Analyze this standup transcript and provide a structured summary.
 
 Transcript:
 ---
 {transcript}
 ---
 
-Use your tools to:
-1. Extract all blockers and risks
-2. Summarize what's done and in progress
-3. Format the output as a clean summary
-
-Provide the final output as a structured JSON."""
+Respond with ONLY a valid JSON object (no markdown, no code blocks) with this structure:
+{{
+    "done": ["item1", "item2"],
+    "in_progress": ["item1", "item2"],
+    "blockers": [
+        {{"description": "blocker", "owner": "name", "severity": "high|medium|low"}}
+    ],
+    "actions": [
+        {{"task": "action", "owner": "name", "deadline": "when"}}
+    ]
+}}"""
 
     try:
-        # Invoke the agent
-        result = agent.invoke({"messages": [{"role": "user", "content": prompt}]})
+        # Call Anthropic API
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=1024,
+            system=system_prompt,
+            messages=[
+                {"role": "user", "content": user_prompt}
+            ]
+        )
+
+        output = response.content[0].text
 
         if VERBOSE:
-            print("\n✓ Agent completed successfully")
+            print("\n[OK] Agent completed successfully")
+            print(f"\nAgent output:\n{output}")
 
         return {
             "status": "success",
-            "output": result,
+            "output": output,
             "transcript_length": len(transcript),
+            "tokens_used": {
+                "input": response.usage.input_tokens,
+                "output": response.usage.output_tokens,
+            }
         }
 
     except Exception as e:
         if VERBOSE:
-            print(f"\n✗ Agent failed: {str(e)}")
+            print(f"\n[ERROR] Agent failed: {str(e)}")
 
         return {
             "status": "error",
@@ -108,7 +120,8 @@ if __name__ == "__main__":
     """
 
     result = run_agent(sample_transcript)
-    print("\nResult:")
+    print("\n" + "="*60)
+    print("RESULT:")
+    print("="*60)
     import json
-
     print(json.dumps(result, indent=2, default=str))
