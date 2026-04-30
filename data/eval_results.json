@@ -1,0 +1,158 @@
+{
+  "timestamp": "1777574302.5058098",
+  "total_examples": 10,
+  "successful": 10,
+  "average_score": 0.3625,
+  "results": [
+    {
+      "id": "01",
+      "status": "success",
+      "scores": {
+        "done": 0.5,
+        "in_progress": 0.5,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.75,
+      "tokens_used": {
+        "input": 277,
+        "output": 156
+      }
+    },
+    {
+      "id": "02",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.25,
+      "tokens_used": {
+        "input": 267,
+        "output": 141
+      }
+    },
+    {
+      "id": "03",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.25,
+      "tokens_used": {
+        "input": 296,
+        "output": 258
+      }
+    },
+    {
+      "id": "04",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.25,
+      "tokens_used": {
+        "input": 279,
+        "output": 244
+      }
+    },
+    {
+      "id": "05",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.25,
+      "tokens_used": {
+        "input": 276,
+        "output": 145
+      }
+    },
+    {
+      "id": "06",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.25,
+      "tokens_used": {
+        "input": 302,
+        "output": 252
+      }
+    },
+    {
+      "id": "07",
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.5,
+      "tokens_used": {
+        "input": 291,
+        "output": 216
+      }
+    },
+    {
+      "id": "08",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.5,
+        "actions": 1.0
+      },
+      "overall_score": 0.375,
+      "tokens_used": {
+        "input": 304,
+        "output": 236
+      }
+    },
+    {
+      "id": "09",
+      "status": "success",
+      "scores": {
+        "done": 0.5,
+        "in_progress": 0.0,
+        "blockers": 0.0,
+        "actions": 1.0
+      },
+      "overall_score": 0.375,
+      "tokens_used": {
+        "input": 289,
+        "output": 205
+      }
+    },
+    {
+      "id": "10",
+      "status": "success",
+      "scores": {
+        "done": 0.0,
+        "in_progress": 0.0,
+        "blockers": 0.5,
+        "actions": 1.0
+      },
+      "overall_score": 0.375,
+      "tokens_used": {
+        "input": 340,
+        "output": 226
+      }
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+[
+  {
+    "id": "01",
+    "input": "Alice: Finished the user authentication API endpoint yesterday. Today I'm starting frontend forms. I'm blocked by the staging environment still being down.\n\nBob: Wrapped up the database migration. Tests are passing. Starting performance optimization next.",
+    "expected_output": {
+      "done": [
+        "User authentication API endpoint",
+        "Database migration with passing tests"
+      ],
+      "in_progress": [
+        "Frontend forms development",
+        "Performance optimization"
+      ],
+      "blockers": [
+        {
+          "description": "Staging environment is down",
+          "owner": "Alice",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Restore staging environment",
+          "owner": "DevOps",
+          "deadline": "ASAP"
+        }
+      ]
+    }
+  },
+  {
+    "id": "02",
+    "input": "Carol: Yesterday merged the redesign components. Today working on responsive layouts. Everything's on track.\n\nDave: Code review is blocking me. Still waiting on feedback from the senior engineer.",
+    "expected_output": {
+      "done": [
+        "Redesign components merged"
+      ],
+      "in_progress": [
+        "Responsive layouts"
+      ],
+      "blockers": [
+        {
+          "description": "Waiting for code review feedback from senior engineer",
+          "owner": "Dave",
+          "severity": "medium"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Provide code review feedback",
+          "owner": "Senior Engineer",
+          "deadline": "EOD today"
+        }
+      ]
+    }
+  },
+  {
+    "id": "03",
+    "input": "Eve: Completed unit tests for the payment module. Integrated with Stripe yesterday. Today will do integration testing.\n\nFrank: Documentation for the API is almost done. Should be finished tomorrow.\n\nGrace: Testing the payment flow. Found a bug in the refund logic. Need to fix it before we can move forward.",
+    "expected_output": {
+      "done": [
+        "Unit tests for payment module",
+        "Stripe integration"
+      ],
+      "in_progress": [
+        "Integration testing",
+        "API documentation",
+        "Payment flow testing"
+      ],
+      "blockers": [
+        {
+          "description": "Bug found in refund logic - blocking payment flow testing",
+          "owner": "Grace",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Fix refund logic bug",
+          "owner": "Eve",
+          "deadline": "EOD tomorrow"
+        }
+      ]
+    }
+  },
+  {
+    "id": "04",
+    "input": "Henry: Finished the dashboard UI mockups. Presenting them to the product team today for feedback.\n\nIris: Infrastructure setup is blocked. We're still waiting for cloud credentials from IT.\n\nJack: Backend API is ready for testing.",
+    "expected_output": {
+      "done": [
+        "Dashboard UI mockups"
+      ],
+      "in_progress": [
+        "Product feedback on mockups",
+        "Backend API development"
+      ],
+      "blockers": [
+        {
+          "description": "Cloud credentials not yet received from IT - blocking infrastructure setup",
+          "owner": "Iris",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Request and provision cloud credentials",
+          "owner": "IT",
+          "deadline": "end of week"
+        },
+        {
+          "task": "Begin backend API testing",
+          "owner": "Iris",
+          "deadline": "after infrastructure is ready"
+        }
+      ]
+    }
+  },
+  {
+    "id": "05",
+    "input": "Karen: Pulled all user data for analytics. Started building the dashboard queries. Stuck because the database schema documentation is incomplete.\n\nLeo: Reviewed Karen's data extraction. Looking good. Can help fill in the schema gaps.",
+    "expected_output": {
+      "done": [
+        "User data extracted for analytics"
+      ],
+      "in_progress": [
+        "Analytics dashboard queries",
+        "Schema documentation review"
+      ],
+      "blockers": [
+        {
+          "description": "Database schema documentation is incomplete - blocking dashboard queries",
+          "owner": "Karen",
+          "severity": "medium"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Complete database schema documentation",
+          "owner": "Leo",
+          "deadline": "tomorrow morning"
+        }
+      ]
+    }
+  },
+  {
+    "id": "06",
+    "input": "Mona: Fixed three critical bugs in the checkout flow. Updated tests accordingly. Ready for QA.\n\nNate: QA testing the checkout. Found one more edge case we didn't account for. Need dev to review.\n\nOlivia: Mobile app compilation is broken. Need help from the build team. This is holding everything up.",
+    "expected_output": {
+      "done": [
+        "Three critical bugs fixed in checkout flow",
+        "Tests updated for bug fixes"
+      ],
+      "in_progress": [
+        "QA testing checkout flow",
+        "Mobile app build troubleshooting"
+      ],
+      "blockers": [
+        {
+          "description": "Edge case found in checkout flow - needs developer review",
+          "owner": "Nate",
+          "severity": "medium"
+        },
+        {
+          "description": "Mobile app compilation broken - blocking all mobile work",
+          "owner": "Olivia",
+          "severity": "critical"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Review and fix checkout edge case",
+          "owner": "Mona",
+          "deadline": "ASAP"
+        },
+        {
+          "task": "Debug mobile app build failure",
+          "owner": "Build Team",
+          "deadline": "ASAP"
+        }
+      ]
+    }
+  },
+  {
+    "id": "07",
+    "input": "Peter: Deployed the authentication service to production yesterday. No issues so far. Monitoring logs.\n\nQuinn: Analytics pipeline is live. Processing events without errors.\n\nRuth: Customer onboarding flow needs to be tested end-to-end but can't do it because the staging environment got reset.",
+    "expected_output": {
+      "done": [
+        "Authentication service deployed to production",
+        "Analytics pipeline deployed and live"
+      ],
+      "in_progress": [
+        "Production monitoring and logging",
+        "Analytics event processing",
+        "End-to-end onboarding flow testing (planning)"
+      ],
+      "blockers": [
+        {
+          "description": "Staging environment was reset - blocking end-to-end testing of onboarding flow",
+          "owner": "Ruth",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Restore staging environment from backup",
+          "owner": "DevOps",
+          "deadline": "within 2 hours"
+        }
+      ]
+    }
+  },
+  {
+    "id": "08",
+    "input": "Sam: Rewrote the caching layer for better performance. Benchmarks show 40% improvement. Ready for code review.\n\nTara: Reviewing Sam's cache rewrite. Two optimization suggestions. Will send feedback by EOD.\n\nUma: The monitoring dashboard still isn't showing real-time metrics. Data is 5 minutes delayed.",
+    "expected_output": {
+      "done": [
+        "Caching layer rewritten with 40% performance improvement"
+      ],
+      "in_progress": [
+        "Code review of caching implementation",
+        "Monitoring dashboard real-time metrics work"
+      ],
+      "blockers": [],
+      "actions": [
+        {
+          "task": "Address monitoring dashboard latency - ensure real-time data display",
+          "owner": "Uma",
+          "deadline": "end of sprint"
+        }
+      ]
+    }
+  },
+  {
+    "id": "09",
+    "input": "Vera: Started implementing the notification system. Sent draft design to the team for review.\n\nWayne: Waiting for Vera's design before I can start the backend notifications service.\n\nXander: Documentation for the SDK is 50% done. Should have it complete by Thursday.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [
+        "Notification system design (draft)",
+        "SDK documentation (50% complete)"
+      ],
+      "blockers": [
+        {
+          "description": "Waiting for notification system design approval before starting backend service",
+          "owner": "Wayne",
+          "severity": "medium"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Review and approve notification system design",
+          "owner": "Team",
+          "deadline": "tomorrow"
+        },
+        {
+          "task": "Complete SDK documentation",
+          "owner": "Xander",
+          "deadline": "Thursday EOD"
+        }
+      ]
+    }
+  },
+  {
+    "id": "10",
+    "input": "Yara: Successfully migrated legacy database to new architecture. Verified data integrity. 100,000 records migrated without loss.\n    \nZoe: Running final stress tests on the migration. Everything looks stable.\n\nAlex: The old API endpoints are still being used by third-party clients. We can't deprecate them yet. Need to notify all API consumers first.\n\nBella: Risk: if we remove old endpoints without notice, we could break integrations. Recommend 90-day deprecation window.",
+    "expected_output": {
+      "done": [
+        "Legacy database migration to new architecture",
+        "Data integrity verification (100,000 records)"
+      ],
+      "in_progress": [
+        "Stress testing on migrated system",
+        "Third-party API consumer notification",
+        "Deprecation timeline planning"
+      ],
+      "blockers": [],
+      "actions": [
+        {
+          "task": "Notify all API consumers about endpoint deprecation",
+          "owner": "Alex",
+          "deadline": "within 1 week"
+        },
+        {
+          "task": "Establish 90-day deprecation window for old API endpoints",
+          "owner": "Product Team",
+          "deadline": "decision needed by end of week"
+        }
+      ]
+    }
+  }
+]
