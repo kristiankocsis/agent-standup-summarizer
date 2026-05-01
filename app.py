@@ -8,6 +8,43 @@ import streamlit as st
 
 from src.agent import run_agent
 
+
+def _to_markdown(summary: dict, timestamp: str) -> str:
+    lines = [f"## Daily Standup Summary", f"*{timestamp}*", ""]
+
+    done = summary.get("done", [])
+    lines.append(f"### ✅ Done ({len(done)})")
+    lines += [f"- {item}" for item in done] if done else ["- *(nothing completed)*"]
+    lines.append("")
+
+    ip = summary.get("in_progress", [])
+    lines.append(f"### 🔄 In Progress ({len(ip)})")
+    lines += [f"- {item}" for item in ip] if ip else ["- *(nothing in progress)*"]
+    lines.append("")
+
+    blockers = summary.get("blockers", [])
+    lines.append(f"### 🚧 Blockers ({len(blockers)})")
+    if blockers:
+        for b in blockers:
+            sev = b.get("severity", "medium")
+            icon = "🔴" if sev == "high" else "🟡" if sev == "medium" else "🟢"
+            lines.append(f"- {icon} **{b.get('owner', '?')}:** {b.get('description', '')}")
+    else:
+        lines.append("- *(no blockers)*")
+    lines.append("")
+
+    actions = summary.get("actions", [])
+    lines.append(f"### 📋 Actions ({len(actions)})")
+    if actions:
+        for a in actions:
+            deadline = a.get("deadline")
+            dl = f" *(by {deadline})*" if deadline and str(deadline) != "null" else ""
+            lines.append(f"- **{a.get('owner', '?')}:** {a.get('task', '')}{dl}")
+    else:
+        lines.append("- *(no action items)*")
+
+    return "\n".join(lines)
+
 # ── Page config ────────────────────────────────────────────────────────────
 
 st.set_page_config(
@@ -206,6 +243,16 @@ if run_btn and (transcript or "").strip():
 
     with st.expander("Raw JSON output"):
         st.json(summary)
+
+    with st.expander("📤 Export as Markdown"):
+        md = _to_markdown(summary, datetime.now().strftime("%Y-%m-%d %H:%M"))
+        st.code(md, language="markdown")
+        st.download_button(
+            label="⬇️ Download .md file",
+            data=md,
+            file_name=f"standup_{datetime.now().strftime('%Y%m%d_%H%M')}.md",
+            mime="text/markdown",
+        )
 
 # ── Sidebar history (rendered after history.append so current run is visible) ──
 
