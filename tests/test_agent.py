@@ -3,6 +3,12 @@ Unit tests for Standup Summarizer Agent.
 """
 
 import json
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load dummy test credentials instead of real .env
+load_dotenv(Path(__file__).parent.parent / ".env.test", override=True)
+
 from src.agent import run_agent
 from src.tools import extract_blockers, summarize_progress, format_output
 
