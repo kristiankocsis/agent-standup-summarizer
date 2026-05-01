@@ -1,169 +1,163 @@
 # Standup Summarizer Agent
 
-An AI agent that automatically extracts and structures key information from daily standup meeting notes.
+An AI agent that transforms raw daily standup transcripts into structured, actionable summaries — built with Claude, LangGraph, and Langfuse.
 
-## Goal
+## What it does
 
-Transform raw standup transcripts into organized, actionable summaries with:
-- **Done** — what the team completed
-- **In Progress** — current work
-- **Blockers** — obstacles with owners and deadlines
-- **Actions** — follow-ups with assignees
+Paste a standup transcript, get back a structured summary:
 
-## Features
+| Section | What's extracted |
+|---|---|
+| ✅ **Done** | Completed work items |
+| 🔄 **In Progress** | Current work items |
+| 🚧 **Blockers** | Obstacles with owner + severity |
+| 📋 **Actions** | Follow-ups with owner + deadline |
 
-- **Single-agent loop** — thinks, acts, observes, repeats until done
-- **Context-aware extraction** — understands implicit blockers and risks
-- **Structured output** — JSON/Markdown, ready for Slack or Notion
-- **Eval-driven** — 50 golden examples for quality assurance
-- **Langfuse tracing** — full visibility into agent decisions
+The agent understands implicit blockers ("staging is down"), compound sentences ("finished X and now working on Y"), resolved blockers, and infers action items from blockers when no one explicitly owns the fix.
 
-## Architecture
+## Demo
 
 ```
-Input (standup transcript)
-    ↓
-Agent (LangGraph)
-    ├─ Tool: extract_blockers()
-    ├─ Tool: summarize_progress()
-    └─ Tool: format_output()
-    ↓
-Output (structured JSON)
+Input:
+  Alice: Finished the auth API endpoint. Starting frontend forms today.
+  Blocked by staging environment still being down.
+
+  Bob: Wrapped up the database migration. Tests passing.
+  Starting performance optimization next.
 ```
 
-## Prerequisites
-
-- Python 3.12+
-- Anthropic API key (Claude Sonnet 4.6)
-- (Optional) Langfuse account for tracing
-
-## Setup
-
-1. **Clone the repo**
-   ```bash
-   git clone https://github.com/kristiankocsis/agent-standup-summarizer.git
-   cd agent-standup-summarizer
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API keys:
-   # ANTHROPIC_API_KEY=sk-ant-...
-   # LANGFUSE_PUBLIC_KEY=... (optional)
-   # LANGFUSE_SECRET_KEY=... (optional)
-   ```
-
-4. **Run the agent**
-   ```bash
-   python -m src.agent
-   ```
-
-## Example
-
-**Input:**
-```
-Alice: Finished the API endpoint yesterday. Working on frontend now.
-      Blocked by missing staging environment.
-Bob: Wrapped up the database migration. Starting on tests today.
-Carol: Still on the design review. Hope to be done by Friday.
-```
-
-**Output:**
 ```json
 {
-  "done": [
-    "API endpoint",
-    "Database migration"
-  ],
-  "in_progress": [
-    "Frontend development",
-    "Design review"
-  ],
-  "blockers": [
-    {
-      "description": "Missing staging environment",
-      "owner": "Alice",
-      "priority": "high"
-    }
-  ],
-  "actions": [
-    {
-      "task": "Provision staging environment",
-      "owner": "DevOps",
-      "deadline": "EOD tomorrow"
-    }
-  ]
+  "done": ["Alice: finished the user authentication API endpoint", "Bob: wrapped up the database migration"],
+  "in_progress": ["Alice: starting frontend forms", "Bob: starting performance optimization"],
+  "blockers": [{"description": "Staging environment is down", "owner": "Alice", "severity": "high"}],
+  "actions": [{"task": "Restore staging environment", "owner": "DevOps", "deadline": "ASAP"}]
 }
 ```
 
-## Evaluation Results
+## Architecture
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| Extraction accuracy | 90% | 0% |
-| Golden dataset size | 50 | 0 |
-| Blocker detection | 85% | — |
-| False positives | <5% | — |
+The agent runs a real Think → Act → Observe loop via LangGraph:
 
-*Baseline will be established once golden dataset is created.*
-
-## Development
-
-### Project Structure
 ```
-src/
-  ├── agent.py       – Main agent definition (LangGraph)
-  ├── tools.py       – Tool implementations
-  └── config.py      – Configuration and constants
-data/
-  ├── golden_dataset/  – 50 labeled examples for eval
-  └── traces/          – Langfuse trace logs
-tests/
-  └── test_agent.py  – Unit and integration tests
+START → call_llm → [tool_use?] → call_tools → call_llm → ... → END
 ```
 
-### Adding Tools
+Three tools fire in sequence:
 
-Edit `src/tools.py`:
-```python
-@tool
-def my_tool(input: str) -> str:
-    """Description for the model."""
-    return result
+```
+extract_blockers(transcript)    → {"blockers": [...], "risks": [...]}
+summarize_progress(transcript)  → {"done": [...], "in_progress": [...], "actions": [...]}
+format_output(done, in_progress, blockers, actions) → final JSON
 ```
 
-Then add to agent in `src/agent.py`.
+Each extraction tool makes a focused single-turn LLM call with precise prompt engineering. The orchestrator (`call_llm`) decides the tool sequence; `format_output` is the terminal step that writes structured JSON into agent state.
 
-### Running Evals
+## Eval results
 
+Tested against 30 labeled golden examples covering edge cases: compound sentences, implicit blockers, resolved blockers, hotfix crises, sprint velocity risks, onboarding, async standups, and more.
+
+| Category | Score |
+|---|---|
+| 🚧 Blockers | **98.7%** |
+| ✅ Done | **92.3%** |
+| 📋 Actions | **82.0%** |
+| 🔄 In Progress | **79.6%** |
+| **Overall** | **88.1%** (30/30 passed) |
+
+Scoring uses token overlap (Jaccard similarity) — semantic matching, not exact string comparison.
+
+```bash
+python -m tests.eval_golden_dataset          # full 30-example suite
+python -m tests.eval_golden_dataset --limit 3  # quick smoke test
+```
+
+## Streamlit UI
+
+Run the web interface locally:
+
+```bash
+python -m streamlit run app.py
+```
+
+Features:
+- **4 example transcripts** — click to populate and run immediately
+- **Live progress** — see which tool is executing in real time
+- **Run history** — last 5 runs in the sidebar with scores and Restore button
+- **Export** — copy as Markdown or download as `.md` file
+
+## Stack
+
+| Component | Role |
+|---|---|
+| [Claude Sonnet 4.6](https://anthropic.com) | LLM for orchestration and extraction |
+| [LangGraph](https://langchain-ai.github.io/langgraph/) | Agent loop, state management |
+| [LangChain `@tool`](https://python.langchain.com) | Tool definition and schema |
+| [Langfuse](https://langfuse.com) | Tracing, token usage, observability |
+| [Streamlit](https://streamlit.io) | Web UI |
+
+## Setup
+
+**Prerequisites:** Python 3.12+, Anthropic API key
+
+```bash
+git clone https://github.com/kristiankocsis/agent-standup-summarizer.git
+cd agent-standup-summarizer
+
+pip install -r requirements.txt
+
+cp .env.example .env
+# Add your ANTHROPIC_API_KEY to .env
+```
+
+**Run CLI:**
+```bash
+python -m src.agent
+```
+
+**Run UI:**
+```bash
+python -m streamlit run app.py
+```
+
+**Run evals:**
 ```bash
 python -m tests.eval_golden_dataset
 ```
 
-## What I Learned
+### Langfuse (optional)
 
-- **Context engineering** — how to structure tool descriptions and system prompts for better model reasoning
-- **Tool design** — error messages must be actionable, not just descriptive
-- **Evals as discipline** — golden datasets are the single highest-leverage habit
-- **LangGraph abstractions** — state management, checkpointing, retry logic
+Add `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` to `.env` to enable tracing. Each run generates a trace with token counts, tool calls, and stop reasons.
+
+## Project structure
+
+```
+src/
+  agent.py        – LangGraph StateGraph, tool execution loop, run_agent()
+  tools.py        – extract_blockers, summarize_progress, format_output
+  config.py       – SYSTEM_PROMPT, model config, env loading
+app.py            – Streamlit UI
+data/
+  golden_dataset/
+    golden_examples.json   – 30 labeled examples
+  eval_results.json        – latest eval run output
+tests/
+  eval_golden_dataset.py   – Jaccard-scored eval suite
+  test_agent.py            – smoke tests
+```
+
+## What I learned building this
+
+- **Prompt engineering over code** — the biggest quality jumps came from rewriting tool prompts, not the agent loop. Clear definitions ("DONE = past tense; IN PROGRESS = present tense") cut errors in half.
+- **Evals first** — building the golden dataset before finishing the agent forced me to define what "correct" means. Without it, I was flying blind.
+- **Semantic scoring matters** — exact string matching gave misleading 100% scores. Jaccard overlap revealed the real 79–98% range per category.
+- **LangGraph state is the source of truth** — capturing `format_output` JSON directly in agent state (instead of parsing LLM markdown output) made evals reliable.
+- **Implicit knowledge is the hard part** — "staging is down" is an obvious blocker to a human; getting the model to consistently classify it requires explicit prompt rules, not just examples.
 
 ## Links
 
-- [Blog post: Building Your First Agent](https://example.com) — coming soon
-- [LinkedIn](https://linkedin.com/in/kristian-kocsis/) — follow for updates
-- [Langfuse traces](https://app.langfuse.com/) — production visibility
+- [LinkedIn — Kristián Kocsis](https://linkedin.com/in/kristian-kocsis/)
 
 ## License
 
 MIT
-
----
-
-**Status:** Early development (v0.1)  
-**Last updated:** April 2026
