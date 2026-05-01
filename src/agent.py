@@ -130,6 +130,9 @@ def call_llm(state: AgentState) -> dict:
     }
 
 
+_progress_cb = None  # set by run_agent, consumed by call_tools
+
+
 def call_tools(state: AgentState) -> dict:
     """Act + Observe: execute every tool_use block from the last assistant message."""
     last_content = state["messages"][-1]["content"]
@@ -138,6 +141,9 @@ def call_tools(state: AgentState) -> dict:
     for block in last_content:
         if block.type != "tool_use":
             continue
+
+        if _progress_cb:
+            _progress_cb(block.name)
 
         if VERBOSE:
             print(f"  [act]     {block.name}({list(block.input.keys())})")
@@ -208,8 +214,11 @@ _graph = _build_graph()
 # ── Public API ─────────────────────────────────────────────────────────────
 
 @_observe(name="standup-summarizer")
-def run_agent(transcript: str) -> dict:
+def run_agent(transcript: str, progress_callback=None) -> dict:
     """Run the agent on a standup transcript and return structured output."""
+    global _progress_cb
+    _progress_cb = progress_callback
+
     if VERBOSE:
         print(f"\n{'='*60}")
         print(f"STANDUP SUMMARIZER AGENT  |  model: {MODEL}")
