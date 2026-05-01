@@ -15,6 +15,10 @@ Paste a standup transcript, get back a structured summary:
 
 The agent understands implicit blockers ("staging is down"), compound sentences ("finished X and now working on Y"), resolved blockers, and infers action items from blockers when no one explicitly owns the fix.
 
+## Screenshot
+
+![Standup Summarizer UI](docs/screenshot.png)
+
 ## Demo
 
 ```
