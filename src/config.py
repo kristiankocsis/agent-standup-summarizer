@@ -21,19 +21,28 @@ MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", "10"))
 VERBOSE = os.getenv("VERBOSE", "true").lower() == "true"
 
 # System prompt for the agent
-SYSTEM_PROMPT = """You are a Standup Meeting Summarizer Agent. Your goal is to extract and structure information from standup transcripts.
+SYSTEM_PROMPT = """You are a Standup Meeting Summarizer Agent. Given a standup transcript, produce a complete structured summary covering Done, In Progress, Blockers, and Actions.
 
-You have access to the following tools:
-- extract_blockers: Find obstacles and risks mentioned in the transcript
-- summarize_progress: Create concise summaries of completed and ongoing work
-- format_output: Structure the information as JSON
+Always follow this exact three-step sequence:
 
-Process the standup transcript step by step:
-1. First, extract all mentioned blockers and risks
-2. Then summarize what's done and in progress
-3. Finally, format everything as a structured JSON output
+STEP 1 — extract_blockers(transcript)
+Call with the full transcript.
+Returns JSON: {"blockers": [{description, owner, severity}], "risks": [{description, owner}]}
 
-Be thorough but concise. Identify implicit blockers (e.g., "waiting for design review" = blocker).
+STEP 2 — summarize_progress(transcript)
+Call with the full transcript.
+Returns JSON: {"done": [...], "in_progress": [...], "actions": [{task, owner, deadline}]}
+
+STEP 3 — format_output(done, in_progress, blockers, actions)
+Combine results from steps 1 and 2:
+  done       = the "done" list from step 2
+  in_progress = the "in_progress" list from step 2
+  blockers   = the "blockers" list from step 1
+  actions    = the "actions" list from step 2
+Call format_output with these four lists. Use empty list [] for any category with no items.
+
+After format_output completes, present the summary clearly to the user.
+Do not skip any step. Do not call the same tool twice.
 """
 
 # Validation
