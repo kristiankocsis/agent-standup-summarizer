@@ -1,11 +1,92 @@
 {
-  "timestamp": "1777574302.5058098",
-  "total_examples": 10,
-  "successful": 10,
-  "average_score": 0.3625,
+  "timestamp": "2026-05-01T07:32:48.539130+00:00",
+  "total": 30,
+  "success": 30,
+  "avg_score": 0.8813888888888889,
+  "total_elapsed_s": 476.87,
   "results": [
     {
       "id": "01",
+      "scenario": "basic_blocker",
+      "elapsed_s": 14.24,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "02",
+      "scenario": "code_review_blocker",
+      "elapsed_s": 14.62,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "03",
+      "scenario": "bug_blocker_multiple_people",
+      "elapsed_s": 15.68,
+      "status": "success",
+      "scores": {
+        "done": 0.5,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 0.875
+    },
+    {
+      "id": "04",
+      "scenario": "cloud_credentials_blocker",
+      "elapsed_s": 18.58,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 1.0,
+        "actions": 0.0
+      },
+      "score": 0.625
+    },
+    {
+      "id": "05",
+      "scenario": "documentation_gap_blocker",
+      "elapsed_s": 13.29,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 0.875
+    },
+    {
+      "id": "06",
+      "scenario": "multiple_blockers_critical",
+      "elapsed_s": 18.28,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 0.875
+    },
+    {
+      "id": "07",
+      "scenario": "deployment_staging_reset",
+      "elapsed_s": 14.16,
       "status": "success",
       "scores": {
         "done": 0.5,
@@ -13,146 +94,306 @@
         "blockers": 1.0,
         "actions": 1.0
       },
-      "overall_score": 0.75,
-      "tokens_used": {
-        "input": 277,
-        "output": 156
-      }
+      "score": 0.75
     },
     {
-      "id": "02",
+      "id": "08",
+      "scenario": "no_blockers_monitoring_issue",
+      "elapsed_s": 18.67,
       "status": "success",
       "scores": {
-        "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.0,
-        "actions": 1.0
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 0.8,
+        "actions": 0.0
       },
-      "overall_score": 0.25,
-      "tokens_used": {
-        "input": 267,
-        "output": 141
-      }
+      "score": 0.575
     },
     {
-      "id": "03",
+      "id": "09",
+      "scenario": "dependency_blocker",
+      "elapsed_s": 17.07,
       "status": "success",
       "scores": {
-        "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.0,
+        "done": 0.7,
+        "in_progress": 0.5,
+        "blockers": 1.0,
         "actions": 1.0
       },
-      "overall_score": 0.25,
-      "tokens_used": {
-        "input": 296,
-        "output": 258
-      }
+      "score": 0.8
     },
     {
-      "id": "04",
-      "status": "success",
-      "scores": {
-        "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.0,
-        "actions": 1.0
-      },
-      "overall_score": 0.25,
-      "tokens_used": {
-        "input": 279,
-        "output": 244
-      }
-    },
-    {
-      "id": "05",
-      "status": "success",
-      "scores": {
-        "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.0,
-        "actions": 1.0
-      },
-      "overall_score": 0.25,
-      "tokens_used": {
-        "input": 276,
-        "output": 145
-      }
-    },
-    {
-      "id": "06",
-      "status": "success",
-      "scores": {
-        "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.0,
-        "actions": 1.0
-      },
-      "overall_score": 0.25,
-      "tokens_used": {
-        "input": 302,
-        "output": 252
-      }
-    },
-    {
-      "id": "07",
+      "id": "10",
+      "scenario": "migration_risk_no_blocker",
+      "elapsed_s": 18.56,
       "status": "success",
       "scores": {
         "done": 1.0,
         "in_progress": 0.0,
-        "blockers": 0.0,
+        "blockers": 0.8,
         "actions": 1.0
       },
-      "overall_score": 0.5,
-      "tokens_used": {
-        "input": 291,
-        "output": 216
-      }
+      "score": 0.7
     },
     {
-      "id": "08",
+      "id": "11",
+      "scenario": "compound_sentence",
+      "elapsed_s": 14.32,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "12",
+      "scenario": "pr_is_up_equals_done",
+      "elapsed_s": 14.11,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 0.7
+      },
+      "score": 0.925
+    },
+    {
+      "id": "13",
+      "scenario": "almost_done_is_in_progress",
+      "elapsed_s": 13.9,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 0.7
+      },
+      "score": 0.925
+    },
+    {
+      "id": "14",
+      "scenario": "clean_standup_no_blockers_no_actions",
+      "elapsed_s": 13.82,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.6666666666666666,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 0.9166666666666666
+    },
+    {
+      "id": "15",
+      "scenario": "solo_standup",
+      "elapsed_s": 11.8,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "16",
+      "scenario": "sprint_start_nothing_done",
+      "elapsed_s": 13.96,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "17",
+      "scenario": "external_vendor_blocker",
+      "elapsed_s": 21.01,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 1.0,
+        "actions": 0.0
+      },
+      "score": 0.625
+    },
+    {
+      "id": "18",
+      "scenario": "resolved_blocker",
+      "elapsed_s": 15.68,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "19",
+      "scenario": "shared_blocker_multiple_people",
+      "elapsed_s": 17.06,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "20",
+      "scenario": "hotfix_crisis",
+      "elapsed_s": 19.36,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 0.875
+    },
+    {
+      "id": "21",
+      "scenario": "same_as_yesterday",
+      "elapsed_s": 14.36,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 0.7
+      },
+      "score": 0.925
+    },
+    {
+      "id": "22",
+      "scenario": "implicit_blocker_cant_test_until",
+      "elapsed_s": 13.96,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "23",
+      "scenario": "async_remote_format",
+      "elapsed_s": 12.83,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "24",
+      "scenario": "demo_prep",
+      "elapsed_s": 15.99,
       "status": "success",
       "scores": {
         "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.5,
+        "in_progress": 1.0,
+        "blockers": 1.0,
         "actions": 1.0
       },
-      "overall_score": 0.375,
-      "tokens_used": {
-        "input": 304,
-        "output": 236
-      }
+      "score": 0.75
     },
     {
-      "id": "09",
+      "id": "25",
+      "scenario": "infrastructure_technical_jargon",
+      "elapsed_s": 15.6,
       "status": "success",
       "scores": {
-        "done": 0.5,
-        "in_progress": 0.0,
-        "blockers": 0.0,
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
         "actions": 1.0
       },
-      "overall_score": 0.375,
-      "tokens_used": {
-        "input": 289,
-        "output": 205
-      }
+      "score": 1.0
     },
     {
-      "id": "10",
+      "id": "26",
+      "scenario": "waiting_for_architecture_decision",
+      "elapsed_s": 17.66,
       "status": "success",
       "scores": {
-        "done": 0.0,
-        "in_progress": 0.0,
-        "blockers": 0.5,
+        "done": 1.0,
+        "in_progress": 0.7,
+        "blockers": 1.0,
+        "actions": 0.0
+      },
+      "score": 0.675
+    },
+    {
+      "id": "27",
+      "scenario": "sprint_velocity_risk",
+      "elapsed_s": 15.81,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 0.5
+      },
+      "score": 0.875
+    },
+    {
+      "id": "28",
+      "scenario": "new_team_member_onboarding",
+      "elapsed_s": 17.4,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 0.5,
+        "blockers": 1.0,
         "actions": 1.0
       },
-      "overall_score": 0.375,
-      "tokens_used": {
-        "input": 340,
-        "output": 226
-      }
+      "score": 0.875
+    },
+    {
+      "id": "29",
+      "scenario": "all_clear_simple",
+      "elapsed_s": 12.66,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "id": "30",
+      "scenario": "long_mixed_standup",
+      "elapsed_s": 22.43,
+      "status": "success",
+      "scores": {
+        "done": 1.0,
+        "in_progress": 1.0,
+        "blockers": 1.0,
+        "actions": 1.0
+      },
+      "score": 1.0
     }
   ]
 }

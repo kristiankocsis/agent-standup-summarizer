@@ -98,8 +98,10 @@ IN PROGRESS — work happening right now:
 - "design review is ongoing" = IN PROGRESS
 
 ACTIONS — concrete follow-up tasks with a clear owner:
-- "I'll fix X", "will do Y", "need to Z", "can you handle W"
-- Only explicit commitments, not vague mentions
+- Explicit commitments: "I'll fix X", "will do Y", "need to Z", "can you handle W"
+- Inferred from blockers: if someone is blocked by X and no one owns it, add an action to resolve X
+  e.g. "staging is down" → action: "Restore staging environment", owner: "DevOps/team"
+  e.g. "waiting on code review" → action: "Provide code review feedback", owner: reviewer role
 
 CRITICAL RULES:
 - Parse each clause separately: "finished X and now working on Y" → X is DONE, Y is IN PROGRESS

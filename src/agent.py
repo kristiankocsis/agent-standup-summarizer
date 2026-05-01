@@ -47,6 +47,7 @@ def _observe(name: str = None, as_type: str = None):
 class AgentState(TypedDict):
     messages: Annotated[list, operator.add]  # accumulates; each node appends
     iterations: int                           # replaced each call_llm step
+    structured_output: dict | None            # populated when format_output is called
 
 
 # ── Tool schemas (Anthropic format) ────────────────────────────────────────
@@ -156,7 +157,17 @@ def call_tools(state: AgentState) -> dict:
             "content": output,
         })
 
-    return {"messages": [{"role": "user", "content": results}]}
+    # Capture structured output when format_output is called
+    state_update: dict = {"messages": [{"role": "user", "content": results}]}
+    for block in last_content:
+        if block.type == "tool_use" and block.name == "format_output":
+            try:
+                parsed = json.loads(results[-1]["content"])
+                if "standup_summary" in parsed:
+                    state_update["structured_output"] = parsed["standup_summary"]
+            except (json.JSONDecodeError, IndexError, KeyError):
+                pass
+    return state_update
 
 
 # ── Routing ────────────────────────────────────────────────────────────────
@@ -211,6 +222,7 @@ def run_agent(transcript: str) -> dict:
     initial_state: AgentState = {
         "messages": [{"role": "user", "content": f"Analyze this standup transcript:\n\n{transcript}"}],
         "iterations": 0,
+        "structured_output": None,
     }
 
     try:
@@ -230,6 +242,7 @@ def run_agent(transcript: str) -> dict:
         result = {
             "status": "success",
             "output": output_text,
+            "structured_output": final_state.get("structured_output"),
             "iterations": final_state["iterations"],
             "transcript_length": len(transcript),
         }

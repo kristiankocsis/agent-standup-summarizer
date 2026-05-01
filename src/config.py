@@ -32,6 +32,7 @@ Returns JSON: {"blockers": [{description, owner, severity}], "risks": [{descript
 STEP 2 — summarize_progress(transcript)
 Call with the full transcript.
 Returns JSON: {"done": [...], "in_progress": [...], "actions": [{task, owner, deadline}]}
+Actions include both explicit commitments AND actions inferred from blockers (who should resolve them).
 
 STEP 3 — format_output(done, in_progress, blockers, actions)
 Combine results from steps 1 and 2:
