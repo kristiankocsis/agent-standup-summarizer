@@ -1,6 +1,7 @@
 [
   {
     "id": "01",
+    "scenario": "basic_blocker",
     "input": "Alice: Finished the user authentication API endpoint yesterday. Today I'm starting frontend forms. I'm blocked by the staging environment still being down.\n\nBob: Wrapped up the database migration. Tests are passing. Starting performance optimization next.",
     "expected_output": {
       "done": [
@@ -29,6 +30,7 @@
   },
   {
     "id": "02",
+    "scenario": "code_review_blocker",
     "input": "Carol: Yesterday merged the redesign components. Today working on responsive layouts. Everything's on track.\n\nDave: Code review is blocking me. Still waiting on feedback from the senior engineer.",
     "expected_output": {
       "done": [
@@ -55,6 +57,7 @@
   },
   {
     "id": "03",
+    "scenario": "bug_blocker_multiple_people",
     "input": "Eve: Completed unit tests for the payment module. Integrated with Stripe yesterday. Today will do integration testing.\n\nFrank: Documentation for the API is almost done. Should be finished tomorrow.\n\nGrace: Testing the payment flow. Found a bug in the refund logic. Need to fix it before we can move forward.",
     "expected_output": {
       "done": [
@@ -84,6 +87,7 @@
   },
   {
     "id": "04",
+    "scenario": "cloud_credentials_blocker",
     "input": "Henry: Finished the dashboard UI mockups. Presenting them to the product team today for feedback.\n\nIris: Infrastructure setup is blocked. We're still waiting for cloud credentials from IT.\n\nJack: Backend API is ready for testing.",
     "expected_output": {
       "done": [
@@ -105,17 +109,13 @@
           "task": "Request and provision cloud credentials",
           "owner": "IT",
           "deadline": "end of week"
-        },
-        {
-          "task": "Begin backend API testing",
-          "owner": "Iris",
-          "deadline": "after infrastructure is ready"
         }
       ]
     }
   },
   {
     "id": "05",
+    "scenario": "documentation_gap_blocker",
     "input": "Karen: Pulled all user data for analytics. Started building the dashboard queries. Stuck because the database schema documentation is incomplete.\n\nLeo: Reviewed Karen's data extraction. Looking good. Can help fill in the schema gaps.",
     "expected_output": {
       "done": [
@@ -143,6 +143,7 @@
   },
   {
     "id": "06",
+    "scenario": "multiple_blockers_critical",
     "input": "Mona: Fixed three critical bugs in the checkout flow. Updated tests accordingly. Ready for QA.\n\nNate: QA testing the checkout. Found one more edge case we didn't account for. Need dev to review.\n\nOlivia: Mobile app compilation is broken. Need help from the build team. This is holding everything up.",
     "expected_output": {
       "done": [
@@ -162,7 +163,7 @@
         {
           "description": "Mobile app compilation broken - blocking all mobile work",
           "owner": "Olivia",
-          "severity": "critical"
+          "severity": "high"
         }
       ],
       "actions": [
@@ -181,6 +182,7 @@
   },
   {
     "id": "07",
+    "scenario": "deployment_staging_reset",
     "input": "Peter: Deployed the authentication service to production yesterday. No issues so far. Monitoring logs.\n\nQuinn: Analytics pipeline is live. Processing events without errors.\n\nRuth: Customer onboarding flow needs to be tested end-to-end but can't do it because the staging environment got reset.",
     "expected_output": {
       "done": [
@@ -189,8 +191,7 @@
       ],
       "in_progress": [
         "Production monitoring and logging",
-        "Analytics event processing",
-        "End-to-end onboarding flow testing (planning)"
+        "End-to-end onboarding flow testing (pending staging)"
       ],
       "blockers": [
         {
@@ -210,6 +211,7 @@
   },
   {
     "id": "08",
+    "scenario": "no_blockers_monitoring_issue",
     "input": "Sam: Rewrote the caching layer for better performance. Benchmarks show 40% improvement. Ready for code review.\n\nTara: Reviewing Sam's cache rewrite. Two optimization suggestions. Will send feedback by EOD.\n\nUma: The monitoring dashboard still isn't showing real-time metrics. Data is 5 minutes delayed.",
     "expected_output": {
       "done": [
@@ -217,12 +219,12 @@
       ],
       "in_progress": [
         "Code review of caching implementation",
-        "Monitoring dashboard real-time metrics work"
+        "Monitoring dashboard real-time metrics fix"
       ],
       "blockers": [],
       "actions": [
         {
-          "task": "Address monitoring dashboard latency - ensure real-time data display",
+          "task": "Address monitoring dashboard latency",
           "owner": "Uma",
           "deadline": "end of sprint"
         }
@@ -231,11 +233,12 @@
   },
   {
     "id": "09",
+    "scenario": "dependency_blocker",
     "input": "Vera: Started implementing the notification system. Sent draft design to the team for review.\n\nWayne: Waiting for Vera's design before I can start the backend notifications service.\n\nXander: Documentation for the SDK is 50% done. Should have it complete by Thursday.",
     "expected_output": {
       "done": [],
       "in_progress": [
-        "Notification system design (draft)",
+        "Notification system design (draft sent for review)",
         "SDK documentation (50% complete)"
       ],
       "blockers": [
@@ -250,17 +253,13 @@
           "task": "Review and approve notification system design",
           "owner": "Team",
           "deadline": "tomorrow"
-        },
-        {
-          "task": "Complete SDK documentation",
-          "owner": "Xander",
-          "deadline": "Thursday EOD"
         }
       ]
     }
   },
   {
     "id": "10",
+    "scenario": "migration_risk_no_blocker",
     "input": "Yara: Successfully migrated legacy database to new architecture. Verified data integrity. 100,000 records migrated without loss.\n    \nZoe: Running final stress tests on the migration. Everything looks stable.\n\nAlex: The old API endpoints are still being used by third-party clients. We can't deprecate them yet. Need to notify all API consumers first.\n\nBella: Risk: if we remove old endpoints without notice, we could break integrations. Recommend 90-day deprecation window.",
     "expected_output": {
       "done": [
@@ -269,8 +268,7 @@
       ],
       "in_progress": [
         "Stress testing on migrated system",
-        "Third-party API consumer notification",
-        "Deprecation timeline planning"
+        "Third-party API consumer notification planning"
       ],
       "blockers": [],
       "actions": [
@@ -283,6 +281,432 @@
           "task": "Establish 90-day deprecation window for old API endpoints",
           "owner": "Product Team",
           "deadline": "decision needed by end of week"
+        }
+      ]
+    }
+  },
+  {
+    "id": "11",
+    "scenario": "compound_sentence",
+    "note": "Edge case: one sentence contains both Done and In Progress. Agent must split clauses.",
+    "input": "Jana: Finished implementing the search feature and now working on unit tests for it.\n\nMartin: Completed the login page and moved on to the signup flow.",
+    "expected_output": {
+      "done": [
+        "Search feature implementation",
+        "Login page"
+      ],
+      "in_progress": [
+        "Unit tests for search feature",
+        "Signup flow"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "12",
+    "scenario": "pr_is_up_equals_done",
+    "note": "Edge case: 'PR is up for review' means the PR was created = Done, not In Progress.",
+    "input": "Nina: PR is up for review on the login component. Starting on the signup flow today.\n\nOscar: Submitted the database schema changes for review. Now working on the seed data scripts.",
+    "expected_output": {
+      "done": [
+        "Login component PR submitted for review",
+        "Database schema changes submitted for review"
+      ],
+      "in_progress": [
+        "Signup flow development",
+        "Seed data scripts"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "13",
+    "scenario": "almost_done_is_in_progress",
+    "note": "Edge case: 'almost done' and 'should finish today' must be In Progress, not Done.",
+    "input": "Paula: Almost done with the API refactor, should finish today. Nothing blocking me.\n\nRafael: Nearly finished the test suite migration. One more test file to go, will wrap up this afternoon.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [
+        "API refactor (almost complete, finishing today)",
+        "Test suite migration (nearly complete, one file remaining)"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "14",
+    "scenario": "clean_standup_no_blockers_no_actions",
+    "note": "Happy path: everything going well, no blockers, no actions needed.",
+    "input": "Sara: Deployed a hotfix yesterday. Working on the next feature today. All good.\n\nTomas: Reviewing PRs from yesterday. Starting on the user settings page after.",
+    "expected_output": {
+      "done": [
+        "Hotfix deployed"
+      ],
+      "in_progress": [
+        "Next feature development",
+        "PR reviews",
+        "User settings page"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "15",
+    "scenario": "solo_standup",
+    "note": "Edge case: only one person speaking.",
+    "input": "Rachel: Yesterday finished migrating the tests to Jest. Today starting on E2E test setup with Playwright. No blockers.",
+    "expected_output": {
+      "done": [
+        "Test migration to Jest"
+      ],
+      "in_progress": [
+        "E2E test setup with Playwright"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "16",
+    "scenario": "sprint_start_nothing_done",
+    "note": "Edge case: first day of sprint, everyone starting new tasks, done list is empty.",
+    "input": "Stefan: Starting on the new notification feature today. Haven't touched it yet, scoping this morning.\n\nTina: Just assigned to the API performance ticket. Starting investigation today.\n\nUrsula: Beginning work on mobile push notifications. Setting up dev environment first.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [
+        "Notification feature scoping",
+        "API performance investigation",
+        "Mobile push notifications dev environment setup"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "17",
+    "scenario": "external_vendor_blocker",
+    "note": "Blocker caused by external party (vendor/client), not internal team.",
+    "input": "Victor: Can't proceed with the Salesforce integration. Their API documentation is outdated and their support team hasn't responded in 3 days.\n\nWendy: Built the data connector on our side. Waiting for Victor's Salesforce work to test end-to-end.",
+    "expected_output": {
+      "done": [
+        "Data connector built"
+      ],
+      "in_progress": [
+        "Salesforce integration (blocked)",
+        "End-to-end testing (pending Salesforce integration)"
+      ],
+      "blockers": [
+        {
+          "description": "Salesforce API documentation outdated and support unresponsive for 3 days - blocking integration",
+          "owner": "Victor",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Escalate Salesforce support ticket",
+          "owner": "Victor",
+          "deadline": "today"
+        }
+      ]
+    }
+  },
+  {
+    "id": "18",
+    "scenario": "resolved_blocker",
+    "note": "Edge case: blocker mentioned but already resolved this morning. Should not appear in blockers.",
+    "input": "Xenia: The database connection issue that was blocking me yesterday is fixed now. Deployed to staging this morning. Starting on load testing today.\n\nYlan: Reviewed Xenia's fix. Looks solid. I'm continuing work on the reporting module.",
+    "expected_output": {
+      "done": [
+        "Database connection issue fixed and deployed to staging"
+      ],
+      "in_progress": [
+        "Load testing",
+        "Reporting module"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "19",
+    "scenario": "shared_blocker_multiple_people",
+    "note": "Multiple people affected by the same blocker (CI pipeline down).",
+    "input": "Yuri: CI pipeline has been down since last night. Can't deploy anything.\n\nZara: Same issue here - CI is down. All our PRs are stuck in queue.\n\nAdrian: Also blocked by CI. Doing code review in the meantime to stay productive.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [
+        "Code review (Adrian, while CI is down)"
+      ],
+      "blockers": [
+        {
+          "description": "CI pipeline down since last night - blocking all deployments and PR merges",
+          "owner": "Yuri, Zara, Adrian",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Fix CI pipeline",
+          "owner": "DevOps",
+          "deadline": "ASAP"
+        }
+      ]
+    }
+  },
+  {
+    "id": "20",
+    "scenario": "hotfix_crisis",
+    "note": "Production incident during standup. Urgent escalation needed.",
+    "input": "Beth: Production is down. Database ran out of disk space at 3am. I cleared old logs to buy us 30 minutes but we need a proper fix. Need DBA help urgently.\n\nChris: I've already paged the DBA team. Also drafting the incident report.",
+    "expected_output": {
+      "done": [
+        "Temporary fix applied - cleared old logs to restore production"
+      ],
+      "in_progress": [
+        "Database disk space permanent fix",
+        "Incident report drafting"
+      ],
+      "blockers": [
+        {
+          "description": "Production database out of disk space - site down, 30-minute window remaining",
+          "owner": "Beth",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "DBA team to implement permanent disk space fix",
+          "owner": "DBA Team",
+          "deadline": "within 30 minutes"
+        }
+      ]
+    }
+  },
+  {
+    "id": "21",
+    "scenario": "same_as_yesterday",
+    "note": "Edge case: update references previous day with no new done items.",
+    "input": "Diana: Same as yesterday - still working on the billing module refactor. Making good progress, should wrap up by EOD tomorrow.\n\nEvan: Reviewing Diana's billing code. Three more files to go.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [
+        "Billing module refactor (expected completion: tomorrow EOD)",
+        "Code review of billing module (3 files remaining)"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "22",
+    "scenario": "implicit_blocker_cant_test_until",
+    "note": "Edge case: blocker stated as 'can't test until X' without the word 'blocked'.",
+    "input": "Fiona: Finished the backend for the checkout feature. Can't test end-to-end until the payment gateway credentials are set up in the test environment.\n\nGareth: I can set up those credentials. Will do it this afternoon.",
+    "expected_output": {
+      "done": [
+        "Checkout feature backend"
+      ],
+      "in_progress": [],
+      "blockers": [
+        {
+          "description": "Payment gateway credentials not configured in test environment - blocking end-to-end checkout testing",
+          "owner": "Fiona",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Set up payment gateway credentials in test environment",
+          "owner": "Gareth",
+          "deadline": "this afternoon"
+        }
+      ]
+    }
+  },
+  {
+    "id": "23",
+    "scenario": "async_remote_format",
+    "note": "Async standup format with Yesterday/Today/Blockers structure.",
+    "input": "Greg (async): Yesterday: Completed data pipeline refactor. Today: Starting on the new reporting module. Blockers: None.\n\nHeidi (async): Yesterday: PR reviews. Today: Continuing dashboard optimization. Blockers: None.",
+    "expected_output": {
+      "done": [
+        "Data pipeline refactor"
+      ],
+      "in_progress": [
+        "Reporting module",
+        "Dashboard optimization"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "24",
+    "scenario": "demo_prep",
+    "note": "Sprint end / demo preparation scenario.",
+    "input": "Ivan: Demo is tomorrow. Yesterday polished the UI. Today finishing the last two demo flows: the export feature and the onboarding tour.\n\nJulia: Recording a backup demo video in case of technical issues during the live demo.",
+    "expected_output": {
+      "done": [
+        "UI polish for demo"
+      ],
+      "in_progress": [
+        "Export feature demo flow",
+        "Onboarding tour demo flow",
+        "Backup demo video recording"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "25",
+    "scenario": "infrastructure_technical_jargon",
+    "note": "Technical infrastructure standup with Kubernetes, Terraform, etc.",
+    "input": "Kevin: Kubernetes cluster scaling issues resolved. Updated HPA configuration, pods now auto-scale correctly under load.\n\nLaura: Still troubleshooting the Terraform state lock. Remote backend is stuck. Need DevOps to manually unlock it.",
+    "expected_output": {
+      "done": [
+        "Kubernetes HPA configuration fix - pods auto-scaling correctly"
+      ],
+      "in_progress": [
+        "Terraform state lock troubleshooting"
+      ],
+      "blockers": [
+        {
+          "description": "Terraform remote backend stuck in state lock - blocking all infrastructure changes",
+          "owner": "Laura",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Manually unlock Terraform remote backend state",
+          "owner": "DevOps",
+          "deadline": "ASAP"
+        }
+      ]
+    }
+  },
+  {
+    "id": "26",
+    "scenario": "waiting_for_architecture_decision",
+    "note": "Blocker is an unresolved internal decision, not a technical issue.",
+    "input": "Mike: Authentication implementation is done. But we're waiting for the team to decide between JWT and sessions before I can integrate it into the app.\n\nNancy: Same blocker for me on the mobile side. We're both stuck until this gets decided.",
+    "expected_output": {
+      "done": [
+        "Authentication implementation"
+      ],
+      "in_progress": [],
+      "blockers": [
+        {
+          "description": "Architecture decision needed: JWT vs sessions - blocking auth integration for both web and mobile",
+          "owner": "Mike, Nancy",
+          "severity": "high"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Make JWT vs sessions architecture decision",
+          "owner": "Tech Lead",
+          "deadline": "today"
+        }
+      ]
+    }
+  },
+  {
+    "id": "27",
+    "scenario": "sprint_velocity_risk",
+    "note": "Risk flagged (low velocity) but no hard blocker. Actions needed to recover.",
+    "input": "Oliver: Just a heads up - we've completed 8 of 21 story points with only 3 days left in the sprint. We might not hit the goal.\n\nPaula: I have some capacity. I can pick up some of Oliver's tickets if we need to rebalance.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [],
+      "blockers": [],
+      "actions": [
+        {
+          "task": "Review sprint commitments and reassign tickets to recover velocity",
+          "owner": "Team",
+          "deadline": "today"
+        },
+        {
+          "task": "Paula to pick up Oliver's tickets if sprint goal is at risk",
+          "owner": "Paula",
+          "deadline": "today"
+        }
+      ]
+    }
+  },
+  {
+    "id": "28",
+    "scenario": "new_team_member_onboarding",
+    "note": "New joiner missing access - classic implicit blocker.",
+    "input": "Quincy (first week): Still setting up my dev environment. I'm missing access to the production database and the Jira board. Can't get started without those.\n\nRosa: I'm helping Quincy with onboarding. Going through the code review process with him today.",
+    "expected_output": {
+      "done": [],
+      "in_progress": [
+        "Dev environment setup (Quincy)",
+        "Onboarding and code review process walkthrough (Rosa and Quincy)"
+      ],
+      "blockers": [
+        {
+          "description": "Quincy missing access to production database and Jira board - blocking onboarding",
+          "owner": "Quincy",
+          "severity": "medium"
+        }
+      ],
+      "actions": [
+        {
+          "task": "Grant Quincy access to production database and Jira",
+          "owner": "Admin",
+          "deadline": "today"
+        }
+      ]
+    }
+  },
+  {
+    "id": "29",
+    "scenario": "all_clear_simple",
+    "note": "Everything going smoothly. Short, simple standup.",
+    "input": "Steve: Finished the login page styling. Today on the profile settings page.\n\nTanya: Reviewed and approved Steve's login PR. Now working on the user preferences feature.",
+    "expected_output": {
+      "done": [
+        "Login page styling",
+        "Login PR reviewed and approved"
+      ],
+      "in_progress": [
+        "Profile settings page",
+        "User preferences feature"
+      ],
+      "blockers": [],
+      "actions": []
+    }
+  },
+  {
+    "id": "30",
+    "scenario": "long_mixed_standup",
+    "note": "Four people, mix of done/in-progress/risk. No hard blocker but one risk to flag.",
+    "input": "Uma: Yesterday pushed the new search indexing service to staging. Running validation tests now. Found a minor Unicode character handling issue - should have a fix by noon.\n\nVictor: Reviewed Uma's code. Left detailed comments. She's addressed most of them. Still outstanding: performance on large datasets.\n\nWendy: Started the search UI. Basic layout is done. Working on autocomplete next.\n\nXavier: QA on the legacy search is still ongoing. Down to 3 failing tests, should be clear by EOD.",
+    "expected_output": {
+      "done": [
+        "Search indexing service pushed to staging",
+        "Code review of Uma's search indexing code"
+      ],
+      "in_progress": [
+        "Search indexing validation tests",
+        "Unicode character handling fix",
+        "Search UI autocomplete (basic layout done)",
+        "Legacy search QA (3 failing tests remaining)"
+      ],
+      "blockers": [],
+      "actions": [
+        {
+          "task": "Resolve search indexing performance on large datasets",
+          "owner": "Uma",
+          "deadline": "before merge"
         }
       ]
     }
