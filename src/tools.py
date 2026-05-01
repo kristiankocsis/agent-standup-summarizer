@@ -2,12 +2,19 @@ import json
 from datetime import datetime, timezone
 from langchain_core.tools import tool
 from anthropic import Anthropic
-from .config import ANTHROPIC_API_KEY, MODEL
-
+from .config import ANTHROPIC_API_KEY, MODEL, LANGFUSE_ENABLED
 
 _client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
+# ── Langfuse (optional) ────────────────────────────────────────────────────
+try:
+    from langfuse import observe as _lf_observe, get_client as _lf_get_client
+    _LANGFUSE_OK = LANGFUSE_ENABLED and _lf_get_client().auth_check()
+except Exception:
+    _LANGFUSE_OK = False
 
+
+@(_lf_observe(as_type="generation", name="tool-llm-call") if _LANGFUSE_OK else lambda f: f)
 def _call_llm(prompt: str, max_tokens: int = 512) -> str:
     """Focused single-turn LLM call for extraction tasks."""
     response = _client.messages.create(
@@ -15,6 +22,16 @@ def _call_llm(prompt: str, max_tokens: int = 512) -> str:
         max_tokens=max_tokens,
         messages=[{"role": "user", "content": prompt}],
     )
+    if _LANGFUSE_OK:
+        _lf_get_client().update_current_generation(
+            model=MODEL,
+            input=prompt,
+            output=response.content[0].text,
+            usage_details={
+                "input": response.usage.input_tokens,
+                "output": response.usage.output_tokens,
+            },
+        )
     return response.content[0].text
 
 

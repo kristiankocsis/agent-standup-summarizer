@@ -14,8 +14,32 @@ from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
 from anthropic import Anthropic
 
-from .config import ANTHROPIC_API_KEY, MODEL, SYSTEM_PROMPT, VERBOSE, MAX_ITERATIONS
+from .config import (
+    ANTHROPIC_API_KEY, MODEL, SYSTEM_PROMPT, VERBOSE, MAX_ITERATIONS,
+    LANGFUSE_ENABLED,
+)
 from .tools import TOOLS
+
+
+# ── Langfuse (optional) ────────────────────────────────────────────────────
+try:
+    from langfuse import observe as _lf_observe, get_client as _lf_get_client
+    _LANGFUSE_OK = LANGFUSE_ENABLED and _lf_get_client().auth_check()
+except Exception:
+    _LANGFUSE_OK = False
+
+def _observe(name: str = None, as_type: str = None):
+    """Applies @observe when Langfuse is available, else returns the function unchanged."""
+    def decorator(func):
+        if not _LANGFUSE_OK:
+            return func
+        kwargs = {}
+        if name:
+            kwargs["name"] = name
+        if as_type:
+            kwargs["as_type"] = as_type
+        return _lf_observe(**kwargs)(func)
+    return decorator
 
 
 # ── State ──────────────────────────────────────────────────────────────────
@@ -69,6 +93,7 @@ _client = Anthropic(api_key=ANTHROPIC_API_KEY)
 
 # ── Nodes ──────────────────────────────────────────────────────────────────
 
+@_observe(name="call_llm")
 def call_llm(state: AgentState) -> dict:
     """Think: call the LLM with full message history and available tools."""
     if VERBOSE:
@@ -81,6 +106,17 @@ def call_llm(state: AgentState) -> dict:
         tools=TOOL_SCHEMAS,
         messages=state["messages"],
     )
+
+    if _LANGFUSE_OK:
+        tool_calls = [b.name for b in response.content if b.type == "tool_use"]
+        _lf_get_client().update_current_generation(
+            model=MODEL,
+            usage_details={
+                "input": response.usage.input_tokens,
+                "output": response.usage.output_tokens,
+            },
+            metadata={"stop_reason": response.stop_reason, "tool_calls": tool_calls},
+        )
 
     if VERBOSE:
         tool_calls = [b.name for b in response.content if b.type == "tool_use"]
@@ -160,6 +196,7 @@ _graph = _build_graph()
 
 # ── Public API ─────────────────────────────────────────────────────────────
 
+@_observe(name="standup-summarizer")
 def run_agent(transcript: str) -> dict:
     """Run the agent on a standup transcript and return structured output."""
     if VERBOSE:
@@ -167,6 +204,9 @@ def run_agent(transcript: str) -> dict:
         print(f"STANDUP SUMMARIZER AGENT  |  model: {MODEL}")
         print(f"{'='*60}")
         print(f"Input: {len(transcript)} chars")
+
+    if _LANGFUSE_OK:
+        _lf_get_client().set_current_trace_io(input=transcript)
 
     initial_state: AgentState = {
         "messages": [{"role": "user", "content": f"Analyze this standup transcript:\n\n{transcript}"}],
@@ -187,20 +227,27 @@ def run_agent(transcript: str) -> dict:
         elif isinstance(last_content, str):
             output_text = last_content
 
-        if VERBOSE:
-            print(f"\n[done] {final_state['iterations']} iteration(s)")
-            if output_text:
-                safe = output_text.encode("ascii", errors="replace").decode("ascii")
-                print(f"\nOutput:\n{safe}")
-
-        return {
+        result = {
             "status": "success",
             "output": output_text,
             "iterations": final_state["iterations"],
             "transcript_length": len(transcript),
         }
 
+        if _LANGFUSE_OK:
+            _lf_get_client().set_current_trace_io(output=output_text)
+
+        if VERBOSE:
+            print(f"\n[done] {final_state['iterations']} iteration(s)")
+            if output_text:
+                safe = output_text.encode("ascii", errors="replace").decode("ascii")
+                print(f"\nOutput:\n{safe}")
+
+        return result
+
     except Exception as e:
+        if _LANGFUSE_OK:
+            _lf_get_client().update_current_span(metadata={"error": str(e)})
         if VERBOSE:
             print(f"\n[error] {e}")
         return {
