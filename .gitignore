@@ -44,6 +44,10 @@ logs/
 data/traces/*.json
 data/traces/*.log
 
+# Partial eval runs (--limit / --ids) are scratch output; only the
+# full-suite data/eval_results.json baseline is tracked
+data/eval_results_partial.json
+
 # OS
 .DS_Store
 Thumbs.db

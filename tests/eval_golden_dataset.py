@@ -28,10 +28,51 @@ def load_golden_dataset() -> list[dict]:
 
 # ── Similarity helpers ─────────────────────────────────────────────────────
 
+import re
+
+_STEM_SUFFIXES = ("ion", "ing", "ed", "es", "s", "e")
+
+_VOWELS = "aeiou"
+
+
+def _stem(word: str) -> str:
+    """
+    Tiny suffix-stripping stemmer so inflected forms share a token:
+    tests/testing -> test, migrated/migration -> migrat, polished/polish -> polish,
+    cache/caching -> cach, logs/logging -> log, stopped/stops -> stop.
+    Not linguistically correct -- just deterministic and consistent, which is
+    all Jaccard matching needs. Without it, "stress tests" vs "stress testing"
+    scores as a miss.
+    """
+    if word.endswith("ies") and len(word) > 4:
+        word = word[:-3] + "y"
+    stripped = True
+    while stripped:
+        stripped = False
+        for suffix in _STEM_SUFFIXES:
+            if word.endswith(suffix) and len(word) - len(suffix) >= 3:
+                word = word[: -len(suffix)]
+                stripped = True
+                break
+    # Collapse a trailing doubled consonant left by suffix stripping, so
+    # "logging" -> "logg" -> "log" meets "logs" -> "log".
+    if len(word) >= 4 and word[-1] == word[-2] and word[-1] not in _VOWELS:
+        word = word[:-1]
+    return word
+
+
+def _strip_speaker(text: str) -> str:
+    """
+    Drop a leading "Name:" / "Name (async):" speaker prefix before matching.
+    The agent prefixes items with the speaker's name; golden labels don't.
+    On short items that one extra token skews Jaccard badly.
+    """
+    return re.sub(r"^\s*[A-Z][\w']*(\s*\([^)]*\))?\s*:\s*", "", text)
+
+
 def _tokens(text: str) -> set[str]:
-    """Lowercase word tokens from a string, stripping punctuation."""
-    import re
-    return set(re.findall(r"\b\w+\b", text.lower()))
+    """Lowercase, stemmed word tokens from a string, stripping punctuation."""
+    return {_stem(w) for w in re.findall(r"\b\w+\b", text.lower())}
 
 
 def _jaccard(a: str, b: str) -> float:
@@ -71,10 +112,10 @@ def score_text_list(actual: list, expected: list) -> float:
     if not actual:
         return 0.0
 
-    actual_str = [str(x) for x in actual]
+    actual_str = [_strip_speaker(str(x)) for x in actual]
     hits = sum(
         1 for exp in expected
-        if _best_match(str(exp), actual_str) >= JACCARD_THRESHOLD
+        if _best_match(_strip_speaker(str(exp)), actual_str) >= JACCARD_THRESHOLD
     )
     return hits / len(expected)
 
@@ -159,19 +200,27 @@ def evaluate_example(example: dict) -> dict:
         "status": "success",
         "scores": scores,
         "score": overall,
+        # Raw agent output is persisted so failures can be diagnosed (and
+        # rescored under a modified scorer) offline, without re-running the API.
+        "actual": actual,
     }
 
 
 # ── Full suite ─────────────────────────────────────────────────────────────
 
-def run_eval_suite(limit: int | None = None):
+def run_eval_suite(limit: int | None = None, ids: list[str] | None = None):
     print("\n" + "=" * 70)
     print("GOLDEN DATASET EVALUATION  —  token-overlap (Jaccard) scoring")
     print("=" * 70)
 
     dataset = load_golden_dataset()
+    if ids:
+        dataset = [ex for ex in dataset if ex["id"] in ids]
     if limit:
         dataset = dataset[:limit]
+
+    # Partial runs (--limit / --ids) must not overwrite the full-suite baseline.
+    partial = bool(limit or ids)
 
     print(f"Running {len(dataset)} examples ...\n")
 
@@ -231,12 +280,21 @@ def run_eval_suite(limit: int | None = None):
             print(f"  {r['id']:>3} {r['scenario']:<38} [{r['status']}]")
 
     # ── Persist results ───────────────────────────────────────────────────
-    out_path = Path(__file__).parent.parent / "data" / "eval_results.json"
+    from src.config import MODEL
+
+    filename = "eval_results_partial.json" if partial else "eval_results.json"
+    out_path = Path(__file__).parent.parent / "data" / filename
     payload = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "model": MODEL,
+        "scoring": "jaccard-0.25 + stemming-v2 + speaker-prefix-strip",
         "total": len(results),
         "success": len(ok),
         "avg_score": sum(r["score"] for r in ok) / len(ok) if ok else 0,
+        "category_avgs": {
+            cat: sum(r["scores"][cat] for r in ok) / len(ok) if ok else 0
+            for cat in ("done", "in_progress", "blockers", "actions")
+        },
         "total_elapsed_s": round(total_elapsed, 2),
         "results": results,
     }
@@ -251,5 +309,12 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Run golden dataset evaluation")
     parser.add_argument("--limit", type=int, default=None, help="Run only first N examples")
+    parser.add_argument("--ids", type=str, default=None,
+                        help="Comma-separated example ids to run, e.g. --ids 04,08,17")
     args = parser.parse_args()
-    run_eval_suite(limit=args.limit)
+    # zfill: dataset ids are zero-padded ("04"); shells may strip leading
+    # zeros from unquoted numeric lists (PowerShell parses 04,05 as 4,5)
+    run_eval_suite(
+        limit=args.limit,
+        ids=[i.strip().zfill(2) for i in args.ids.split(",")] if args.ids else None,
+    )
