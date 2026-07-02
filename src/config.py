@@ -2,9 +2,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load .env from project root
+# Load .env from project root. override=False means an explicitly set process
+# env var wins over .env -- handy for one-off experiments without editing .env:
+#   PowerShell:  $env:MODEL = "claude-sonnet-5"; python -m tests.eval_golden_dataset
 env_path = Path(__file__).parent.parent / ".env"
-load_dotenv(dotenv_path=env_path, override=True)
+load_dotenv(dotenv_path=env_path, override=False)
 
 # API Configuration
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")

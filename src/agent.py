@@ -102,7 +102,10 @@ def call_llm(state: AgentState) -> dict:
 
     response = _client.messages.create(
         model=MODEL,
-        max_tokens=1024,
+        # format_output's tool input re-types all four lists, and newer models
+        # (Sonnet 5+) spend thinking tokens from the same budget -- 1024 risks
+        # truncating the tool_use block mid-JSON on long standups.
+        max_tokens=8192,
         system=SYSTEM_PROMPT,
         tools=TOOL_SCHEMAS,
         messages=state["messages"],
