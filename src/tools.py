@@ -101,6 +101,8 @@ NOT a blocker:
   delayed") — that is work to do, not a blocker.
 - Planned sequencing ("we need to do X before we can Y") — that is a plan,
   unless someone's current task is stopped waiting for it.
+  BUT a defect stopping current work IS a blocker: "found a bug, need to fix
+  it before we can move forward" blocks the very testing that found it.
 - A blocker already resolved ("the issue that was blocking me is fixed now").
 
 Severity: high = stops progress today | medium = slows progress or workaround exists | low = minor.
@@ -196,8 +198,12 @@ WORDING — summaries must be scannable:
   "we need a proper fix" → "Implement proper disk space fix"
   (BAD: "Provide cloud credentials to unblock infrastructure setup" — reason appended)
   (BAD: "Resolve database issue" — generic verb, drops the transcript's words)
+- Name the artifact, not a possessive: "Review notification system design",
+  NOT "Review Vera's design"
 - Split compound sentences: "finished X and now working on Y" → X is DONE, Y is IN PROGRESS
 - One item per task: "completed unit tests and integrated with Stripe" → TWO separate DONE items
+- But split only DISTINCT tasks — keep a task and its outcome together:
+  "updated HPA configuration — pods now auto-scale correctly" is ONE item
 - Deadline: the stated timeframe; "ASAP" when a blocker stops work; null when none given
 - If a person mentions nothing done/in-progress, skip them for that category
 
