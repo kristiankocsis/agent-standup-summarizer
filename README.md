@@ -55,7 +55,7 @@ summarize_progress(transcript)  → {"done": [...], "in_progress": [...], "actio
 format_output(done, in_progress, blockers, actions) → final JSON
 ```
 
-Each extraction tool makes a focused single-turn LLM call with precise prompt engineering. The orchestrator (`call_llm`) decides the tool sequence; `format_output` is the terminal step that writes structured JSON into agent state.
+Each extraction tool makes a focused single-turn LLM call: the model first reasons through the transcript speaker by speaker, checks itself against an explicit rule checklist, then emits final JSON in a fenced block (salvaged robustly by `_ensure_json`). The orchestrator (`call_llm`) decides the tool sequence; `format_output` is the terminal step that writes structured JSON into agent state.
 
 ## Eval results
 
@@ -63,18 +63,23 @@ Tested against 30 labeled golden examples covering edge cases: compound sentence
 
 | Category | Score |
 |---|---|
-| 🚧 Blockers | **98.7%** |
-| ✅ Done | **92.3%** |
-| 📋 Actions | **82.0%** |
-| 🔄 In Progress | **79.6%** |
-| **Overall** | **88.1%** (30/30 passed) |
+| ✅ Done | **100%** |
+| 🚧 Blockers | **100%** |
+| 📋 Actions | **96.7%** |
+| 🔄 In Progress | **94.7%** |
+| **Overall** | **97.8%** (30/30 passed) |
 
-Scoring uses token overlap (Jaccard similarity) — semantic matching, not exact string comparison.
+Latest full-suite run (Claude Sonnet 4.6, July 2026). Up from an 88.1% baseline through eval-driven iteration: scorer fixes first (re-baselined at 91.6% on the same outputs), then prompt engineering (+6.2 pp). Single-run numbers vary ±1–2 pp — matches near the similarity threshold flip with sampling temperature; the remaining misses are documented golden-label ambiguities and synonym pairs token overlap can't see.
+
+Scoring uses stemmed token overlap (Jaccard similarity) — semantic matching, not exact string comparison. Every run persists the agent's raw outputs alongside the scores, so the scorer itself can be tuned offline without re-running the API.
 
 ```bash
-python -m tests.eval_golden_dataset          # full 30-example suite
-python -m tests.eval_golden_dataset --limit 3  # quick smoke test
+python -m tests.eval_golden_dataset               # full 30-example suite
+python -m tests.eval_golden_dataset --limit 3     # quick smoke test
+python -m tests.eval_golden_dataset --ids "04,17" # re-run specific examples
 ```
+
+Partial runs (`--limit`/`--ids`) write to a separate git-ignored file so they never overwrite the full-suite baseline in `data/eval_results.json`.
 
 ## Streamlit UI
 
@@ -154,7 +159,10 @@ tests/
 
 - **Prompt engineering over code** — the biggest quality jumps came from rewriting tool prompts, not the agent loop. Clear definitions ("DONE = past tense; IN PROGRESS = present tense") cut errors in half.
 - **Evals first** — building the golden dataset before finishing the agent forced me to define what "correct" means. Without it, I was flying blind.
-- **Semantic scoring matters** — exact string matching gave misleading 100% scores. Jaccard overlap revealed the real 79–98% range per category.
+- **Semantic scoring matters** — exact string matching gave misleading 100% scores. Jaccard overlap revealed the real per-category range.
+- **Concise output beats verbose output under token-overlap scoring** — semantically correct but wordy items ("Escalate to an alternative Salesforce contact to resolve the outdated API documentation issue") scored as misses; word-limit rules in the prompts ("Escalate Salesforce support ticket") recovered them.
+- **Let the model think before the JSON** — rules alone got ignored in single-shot extraction (a literal counter-example in the prompt still got misclassified). Brief per-speaker reasoning plus a self-check checklist made the same rules actually fire.
+- **Persist raw outputs with every eval run** — scorer improvements can then be validated offline by rescoring stored outputs, for free. When the scorer changes, re-baseline before comparing prompt changes.
 - **LangGraph state is the source of truth** — capturing `format_output` JSON directly in agent state (instead of parsing LLM markdown output) made evals reliable.
 - **Implicit knowledge is the hard part** — "staging is down" is an obvious blocker to a human; getting the model to consistently classify it requires explicit prompt rules, not just examples.
 
