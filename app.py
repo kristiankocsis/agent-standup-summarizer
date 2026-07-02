@@ -169,21 +169,15 @@ if run_btn and (transcript or "").strip():
         st.text(result.get("output", ""))
         st.stop()
 
-    # ── Compute a rough quality score for history ──────────────────────────
-    def _has(lst): return 1.0 if lst else 0.7
-    scores = {
-        "done":        _has(summary.get("done")),
-        "in_progress": _has(summary.get("in_progress")),
-        "blockers":    1.0,
-        "actions":     1.0,
+    counts = {
+        cat: len(summary.get(cat) or [])
+        for cat in ("done", "in_progress", "blockers", "actions")
     }
-    avg_score = sum(scores.values()) / len(scores)
 
     st.session_state.history.append({
         "time":       datetime.now().strftime("%H:%M:%S"),
         "transcript": transcript,
-        "scores":     scores,
-        "score":      avg_score,
+        "counts":     counts,
         "iterations": result["iterations"],
         "elapsed":    elapsed,
     })
@@ -261,13 +255,14 @@ with st.sidebar:
         st.divider()
         st.subheader("🕒 Recent runs")
         for i, run in enumerate(reversed(st.session_state.history[-5:])):
-            with st.expander(f"{run['time']}  ·  {run['score']:.0%}", expanded=False):
-                s = run["scores"]
+            c = run["counts"]
+            total = sum(c.values())
+            with st.expander(f"{run['time']}  ·  {total} items", expanded=False):
                 st.caption(
-                    f"✅ done {s['done']:.0%}  "
-                    f"🔄 prog {s['in_progress']:.0%}  "
-                    f"🚧 blk {s['blockers']:.0%}  "
-                    f"📋 act {s['actions']:.0%}"
+                    f"✅ {c['done']} done  "
+                    f"🔄 {c['in_progress']} in progress  "
+                    f"🚧 {c['blockers']} blockers  "
+                    f"📋 {c['actions']} actions"
                 )
                 st.caption(f"{run['iterations']} iterations · {run['elapsed']:.1f}s")
                 if st.button("Restore transcript", key=f"restore_{i}"):
