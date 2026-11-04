@@ -18,7 +18,7 @@ from .config import (
     ANTHROPIC_API_KEY, MODEL, SYSTEM_PROMPT, VERBOSE, MAX_ITERATIONS,
     LANGFUSE_ENABLED,
 )
-from .tools import TOOLS
+from .tools import TOOLS, LLMResponseIncomplete
 
 
 # ── Langfuse (optional) ────────────────────────────────────────────────────
@@ -153,6 +153,8 @@ def call_tools(state: AgentState) -> dict:
 
         try:
             output = TOOL_MAP[block.name].invoke(block.input)
+        except LLMResponseIncomplete:
+            raise
         except Exception as e:
             output = json.dumps({"error": str(e)})
 

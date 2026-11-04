@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from dotenv import load_dotenv
 
@@ -23,9 +24,11 @@ load_dotenv(Path(__file__).parent.parent / ".env.test", override=True)
 
 from langgraph.graph import END
 
-from src.agent import TOOL_SCHEMAS, should_continue
+from src import agent as agent_module
+from src import tools as tools_module
+from src.agent import TOOL_SCHEMAS, run_agent, should_continue
 from src.config import MAX_ITERATIONS
-from src.tools import _ensure_json, format_output
+from src.tools import _call_llm, _ensure_json, format_output
 
 
 # ── format_output (pure function) ──────────────────────────────────────────
@@ -129,6 +132,59 @@ def test_should_continue_ends_on_text_only():
 def test_should_continue_ends_at_max_iterations():
     state = _state([SimpleNamespace(type="tool_use")], iterations=MAX_ITERATIONS)
     assert should_continue(state) == END
+
+
+# ── Cut-off extraction replies ─────────────────────────────────────────────
+
+def _reply(stop_reason, *blocks):
+    usage = SimpleNamespace(input_tokens=1, output_tokens=1)
+    return SimpleNamespace(stop_reason=stop_reason, content=list(blocks), usage=usage)
+
+
+def _text(text):
+    return SimpleNamespace(type="text", text=text)
+
+
+def _fake_client(create):
+    return SimpleNamespace(messages=SimpleNamespace(create=create))
+
+
+def test_call_llm_default_cap_is_8192():
+    calls = []
+
+    def create(**kwargs):
+        calls.append(kwargs)
+        return _reply("end_turn", _text("ok"))
+
+    with patch.object(tools_module, "_client", _fake_client(create)):
+        assert _call_llm("prompt") == "ok"
+    assert calls[0]["max_tokens"] == 8192
+
+
+def _run_agent_with_extraction_reply(reply):
+    # The orchestrator would carry on after a swallowed error, so the second
+    # reply makes the run look successful unless the error stops it.
+    tool_call = SimpleNamespace(
+        type="tool_use", id="t1", name="extract_blockers",
+        input={"transcript": "Alice: blocked on staging."},
+    )
+    orchestrator = iter([_reply("tool_use", tool_call), _reply("end_turn", _text("Summary"))])
+
+    with patch.object(agent_module, "_client", _fake_client(lambda **kw: next(orchestrator))), \
+            patch.object(tools_module, "_client", _fake_client(lambda **kw: reply)):
+        return run_agent("Alice: blocked on staging.")
+
+
+def test_run_agent_fails_when_extraction_reply_is_cut_off():
+    result = _run_agent_with_extraction_reply(_reply("max_tokens", _text("Notes continue and then")))
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "max_tokens" in result["error"]
+
+
+def test_run_agent_fails_when_extraction_reply_is_refused():
+    result = _run_agent_with_extraction_reply(_reply("refusal"))
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "refusal" in result["error"]
 
 
 # ── Plain runner (ASCII output for Windows cp1250 console) ─────────────────

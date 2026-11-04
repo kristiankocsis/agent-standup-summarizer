@@ -15,6 +15,12 @@ except Exception:
     _LANGFUSE_OK = False
 
 
+class LLMResponseIncomplete(RuntimeError):
+    """An extraction reply did not end normally (cut off or refused), so any
+    summary built on it would be incomplete. call_tools re-raises this to fail
+    the run instead of passing the error to the model."""
+
+
 def _first_text(response) -> str:
     """First text block of a response. Newer models (e.g. Sonnet 5 with
     adaptive thinking) may emit thinking blocks before the text, so
@@ -23,13 +29,21 @@ def _first_text(response) -> str:
 
 
 @(_lf_observe(as_type="generation", name="tool-llm-call") if _LANGFUSE_OK else lambda f: f)
-def _call_llm(prompt: str, max_tokens: int = 2048) -> str:
-    """Focused single-turn LLM call for extraction tasks."""
+def _call_llm(prompt: str, max_tokens: int = 8192) -> str:
+    """Focused single-turn LLM call for extraction tasks.
+
+    Thinking tokens share max_tokens with the reply, and the JSON comes last,
+    so a cut-off reply loses exactly the part that matters."""
     response = _client.messages.create(
         model=MODEL,
         max_tokens=max_tokens,
         messages=[{"role": "user", "content": prompt}],
     )
+    if response.stop_reason != "end_turn":
+        raise LLMResponseIncomplete(
+            f"The model's reply did not finish (stop_reason: {response.stop_reason}), "
+            "so the summary would be incomplete."
+        )
     text = _first_text(response)
     if _LANGFUSE_OK:
         _lf_get_client().update_current_generation(
