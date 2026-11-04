@@ -10,7 +10,7 @@ load_dotenv(dotenv_path=env_path, override=False)
 
 # API Configuration
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-MODEL = os.getenv("MODEL", "claude-sonnet-4-6")
+MODEL = os.getenv("MODEL", "claude-opus-5-5")
 
 # Langfuse Configuration (optional)
 LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
