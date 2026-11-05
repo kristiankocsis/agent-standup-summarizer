@@ -64,12 +64,12 @@ Tested against 30 labeled golden examples covering edge cases: compound sentence
 | Category | Score |
 |---|---|
 | ✅ Done | **100%** |
-| 🚧 Blockers | **100%** |
-| 📋 Actions | **96.7%** |
-| 🔄 In Progress | **94.7%** |
-| **Overall** | **97.8%** (30/30 passed) |
+| 📋 Actions | **100%** |
+| 🚧 Blockers | **98.3%** |
+| 🔄 In Progress | **91.9%** |
+| **Overall** | **97.6%** (30/30 passed) |
 
-Latest full-suite run (Claude Sonnet 4.6, July 2026). Up from an 88.1% baseline through eval-driven iteration: scorer fixes first (re-baselined at 91.6% on the same outputs), then prompt engineering (+6.2 pp). Single-run numbers vary ±1–2 pp — matches near the similarity threshold flip with sampling temperature; the remaining misses are documented golden-label ambiguities and synonym pairs token overlap can't see.
+Latest full-suite run (Claude Opus 5.5, November 2026). Claude Sonnet 4.6 scored 97.8% on the same suite in July 2026, a difference within the variation of a single run. That Sonnet score came from eval-driven iteration: up from an 88.1% baseline through scorer fixes first (re-baselined at 91.6% on the same outputs), then prompt engineering (+6.2 pp). Single-run numbers vary ±1–2 pp, because matches near the similarity threshold flip between runs, and token overlap can't see synonym pairs.
 
 Scoring uses stemmed token overlap (Jaccard similarity) — semantic matching, not exact string comparison. Every run persists the agent's raw outputs alongside the scores, so the scorer itself can be tuned offline without re-running the API.
 
@@ -99,7 +99,7 @@ Features:
 
 | Component | Role |
 |---|---|
-| [Claude Sonnet 4.6](https://anthropic.com) | LLM for orchestration and extraction |
+| [Claude Opus 5.5](https://anthropic.com) | LLM for orchestration and extraction |
 | [LangGraph](https://langchain-ai.github.io/langgraph/) | Agent loop, state management |
 | [LangChain `@tool`](https://python.langchain.com) | Tool definition and schema |
 | [Langfuse](https://langfuse.com) | Tracing, token usage, observability |

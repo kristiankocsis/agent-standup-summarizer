@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-07-02T13:50:24.380372+00:00",
-  "model": "claude-sonnet-4-6",
+  "timestamp": "2026-11-05T11:43:34.713466+00:00",
+  "model": "claude-opus-5-5",
   "scoring": "jaccard-0.25 + stemming-v2 + speaker-prefix-strip",
   "total": 30,
   "success": 30,
-  "avg_score": 0.9783333333333334,
+  "avg_score": 0.9755555555555555,
   "category_avgs": {
     "done": 1.0,
-    "in_progress": 0.9466666666666667,
-    "blockers": 1.0,
-    "actions": 0.9666666666666667
+    "in_progress": 0.9188888888888889,
+    "blockers": 0.9833333333333333,
+    "actions": 1.0
   },
-  "total_elapsed_s": 914.72,
+  "total_elapsed_s": 689.91,
   "results": [
     {
       "id": "01",
       "scenario": "basic_blocker",
-      "elapsed_s": 27.21,
+      "elapsed_s": 24.6,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -27,16 +27,16 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Alice: User authentication API endpoint finished",
-          "Bob: Database migration wrapped up, tests passing"
+          "Alice: User authentication API endpoint",
+          "Bob: Database migration (tests passing)"
         ],
         "in_progress": [
-          "Alice: Frontend forms (blocked \u2014 staging down)",
+          "Alice: Frontend forms (blocked by staging down)",
           "Bob: Performance optimization"
         ],
         "blockers": [
           {
-            "description": "Staging environment down \u2014 blocking frontend development",
+            "description": "Staging environment down \u2014 blocking frontend forms work",
             "owner": "Alice",
             "severity": "high"
           }
@@ -53,7 +53,7 @@
     {
       "id": "02",
       "scenario": "code_review_blocker",
-      "elapsed_s": 29.47,
+      "elapsed_s": 22.36,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -68,18 +68,18 @@
         ],
         "in_progress": [
           "Carol: Responsive layouts",
-          "Dave: Code review (blocked)"
+          "Dave: Code review feedback (blocked)"
         ],
         "blockers": [
           {
-            "description": "Senior engineer code review feedback pending \u2014 blocking Dave's code merge",
+            "description": "Code review feedback from senior engineer pending \u2014 blocking Dave's work",
             "owner": "Dave",
             "severity": "high"
           }
         ],
         "actions": [
           {
-            "task": "Review Dave's code",
+            "task": "Provide code review feedback",
             "owner": "Senior Engineer",
             "deadline": "ASAP"
           }
@@ -89,7 +89,7 @@
     {
       "id": "03",
       "scenario": "bug_blocker_multiple_people",
-      "elapsed_s": 30.93,
+      "elapsed_s": 25.07,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -128,27 +128,27 @@
     {
       "id": "04",
       "scenario": "cloud_credentials_blocker",
-      "elapsed_s": 35.66,
+      "elapsed_s": 25.78,
       "status": "success",
       "scores": {
         "done": 1.0,
-        "in_progress": 1.0,
+        "in_progress": 0.5,
         "blockers": 1.0,
         "actions": 1.0
       },
-      "score": 1.0,
+      "score": 0.875,
       "actual": {
         "done": [
-          "Henry: Dashboard UI mockups finished"
+          "Henry: Dashboard UI mockups"
         ],
         "in_progress": [
-          "Henry: Presenting dashboard mockups for product feedback",
-          "Iris: Infrastructure setup (blocked)",
+          "Henry: Presenting dashboard UI mockups to product team",
+          "Iris: Infrastructure setup (blocked on cloud credentials)",
           "Jack: Backend API (ready for testing)"
         ],
         "blockers": [
           {
-            "description": "Cloud credentials from IT not yet provided \u2014 blocking infrastructure setup",
+            "description": "Cloud credentials from IT pending \u2014 blocking infrastructure setup",
             "owner": "Iris",
             "severity": "high"
           }
@@ -165,7 +165,7 @@
     {
       "id": "05",
       "scenario": "documentation_gap_blocker",
-      "elapsed_s": 30.15,
+      "elapsed_s": 25.62,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -177,23 +177,23 @@
       "actual": {
         "done": [
           "Karen: Pulled all user data for analytics",
-          "Leo: Reviewed Karen's data extraction"
+          "Leo: Reviewed and approved user data extraction"
         ],
         "in_progress": [
-          "Karen: Dashboard queries (blocked \u2014 schema docs incomplete)"
+          "Karen: Building dashboard queries (blocked on schema docs)"
         ],
         "blockers": [
           {
-            "description": "Incomplete database schema documentation \u2014 blocking dashboard query development",
+            "description": "Database schema documentation incomplete \u2014 blocking dashboard queries",
             "owner": "Karen",
-            "severity": "medium"
+            "severity": "high"
           }
         ],
         "actions": [
           {
             "task": "Fill in schema documentation gaps",
             "owner": "Leo",
-            "deadline": null
+            "deadline": "ASAP"
           }
         ]
       }
@@ -201,34 +201,32 @@
     {
       "id": "06",
       "scenario": "multiple_blockers_critical",
-      "elapsed_s": 36.81,
+      "elapsed_s": 31.72,
       "status": "success",
       "scores": {
         "done": 1.0,
         "in_progress": 1.0,
-        "blockers": 1.0,
+        "blockers": 0.5,
         "actions": 1.0
       },
-      "score": 1.0,
+      "score": 0.875,
       "actual": {
         "done": [
-          "Mona: Fixed three critical checkout bugs",
-          "Mona: Updated tests for bug fixes"
+          "Mona: Fixed three critical checkout flow bugs",
+          "Mona: Updated checkout tests accordingly"
         ],
         "in_progress": [
-          "Mona: Checkout flow (ready for QA)",
-          "Nate: QA testing checkout flow",
-          "Nate: Checkout edge case investigation",
-          "Olivia: Mobile app compilation (blocked)"
+          "Nate: Checkout QA testing (edge case found)",
+          "Olivia: Mobile app compilation troubleshooting (blocked)"
         ],
         "blockers": [
           {
-            "description": "Mobile app compilation broken \u2014 blocking all mobile development work",
+            "description": "Mobile app compilation broken \u2014 blocking mobile app work",
             "owner": "Olivia",
             "severity": "high"
           },
           {
-            "description": "Unreviewed QA edge case pending dev review \u2014 blocking continued checkout testing",
+            "description": "Unaccounted checkout edge case \u2014 blocking checkout QA sign-off",
             "owner": "Nate",
             "severity": "medium"
           }
@@ -236,17 +234,12 @@
         "actions": [
           {
             "task": "Review checkout edge case",
-            "owner": "Senior Engineer",
+            "owner": "Mona",
             "deadline": "ASAP"
           },
           {
             "task": "Fix mobile app compilation",
-            "owner": "DevOps",
-            "deadline": "ASAP"
-          },
-          {
-            "task": "Review sprint commitments and reassign tickets",
-            "owner": "Team",
+            "owner": "Build Team",
             "deadline": "ASAP"
           }
         ]
@@ -255,7 +248,7 @@
     {
       "id": "07",
       "scenario": "deployment_staging_reset",
-      "elapsed_s": 25.81,
+      "elapsed_s": 20.99,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -266,12 +259,12 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Peter: Authentication service deployed to production",
-          "Quinn: Analytics pipeline live, processing events"
+          "Peter: Deployed authentication service to production",
+          "Quinn: Analytics pipeline live, processing events without errors"
         ],
         "in_progress": [
-          "Peter: Monitoring production logs",
-          "Ruth: Customer onboarding end-to-end testing (blocked)"
+          "Peter: Monitoring authentication service logs",
+          "Ruth: Customer onboarding flow end-to-end testing (blocked)"
         ],
         "blockers": [
           {
@@ -292,27 +285,27 @@
     {
       "id": "08",
       "scenario": "no_blockers_monitoring_issue",
-      "elapsed_s": 30.34,
+      "elapsed_s": 26.67,
       "status": "success",
       "scores": {
         "done": 1.0,
         "in_progress": 0.5,
         "blockers": 1.0,
-        "actions": 0.0
+        "actions": 1.0
       },
-      "score": 0.625,
+      "score": 0.875,
       "actual": {
         "done": [
-          "Sam: Rewrote caching layer (40% perf improvement)"
+          "Sam: Rewrote caching layer (40% benchmark improvement)"
         ],
         "in_progress": [
-          "Tara: Reviewing cache rewrite, feedback by EOD",
-          "Uma: Dashboard real-time metrics delay fix"
+          "Tara: Reviewing cache rewrite (feedback by EOD)",
+          "Uma: Monitoring dashboard real-time metrics fix"
         ],
         "blockers": [],
         "actions": [
           {
-            "task": "Fix dashboard real-time metrics delay",
+            "task": "Fix monitoring dashboard metrics delay",
             "owner": "Uma",
             "deadline": null
           }
@@ -322,7 +315,7 @@
     {
       "id": "09",
       "scenario": "dependency_blocker",
-      "elapsed_s": 38.1,
+      "elapsed_s": 25.32,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -341,7 +334,7 @@
         ],
         "blockers": [
           {
-            "description": "Vera's notification design still in draft/review \u2014 blocking start of backend notifications service",
+            "description": "Notification system design pending review \u2014 blocking backend notifications service",
             "owner": "Wayne",
             "severity": "high"
           }
@@ -358,7 +351,7 @@
     {
       "id": "10",
       "scenario": "migration_risk_no_blocker",
-      "elapsed_s": 40.23,
+      "elapsed_s": 31.96,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -370,23 +363,23 @@
       "actual": {
         "done": [
           "Yara: Migrated legacy database to new architecture",
-          "Yara: Verified data integrity (100,000 records)"
+          "Yara: Verified data integrity (100,000 records, no loss)"
         ],
         "in_progress": [
           "Zoe: Final stress tests on migration",
-          "Alex: API consumer notification (deprecation prerequisite)"
+          "Alex: API consumer notification planning (blocks endpoint deprecation)"
         ],
         "blockers": [],
         "actions": [
           {
             "task": "Notify all API consumers",
             "owner": "Alex",
-            "deadline": "before deprecation"
+            "deadline": null
           },
           {
-            "task": "Adopt 90-day deprecation window policy",
+            "task": "Approve 90-day deprecation window",
             "owner": "Team",
-            "deadline": "ASAP"
+            "deadline": null
           }
         ]
       }
@@ -394,7 +387,7 @@
     {
       "id": "11",
       "scenario": "compound_sentence",
-      "elapsed_s": 22.17,
+      "elapsed_s": 15.36,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -405,8 +398,8 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Jana: Implemented search feature",
-          "Martin: Completed login page"
+          "Jana: Search feature implementation",
+          "Martin: Login page"
         ],
         "in_progress": [
           "Jana: Unit tests for search feature",
@@ -419,7 +412,7 @@
     {
       "id": "12",
       "scenario": "pr_is_up_equals_done",
-      "elapsed_s": 23.5,
+      "elapsed_s": 16.88,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -430,7 +423,7 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Nina: Login component PR submitted for review",
+          "Nina: Login component PR up for review",
           "Oscar: Database schema changes submitted for review"
         ],
         "in_progress": [
@@ -444,7 +437,7 @@
     {
       "id": "13",
       "scenario": "almost_done_is_in_progress",
-      "elapsed_s": 26.74,
+      "elapsed_s": 18.85,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -456,8 +449,8 @@
       "actual": {
         "done": [],
         "in_progress": [
-          "Paula: API refactor",
-          "Rafael: Test suite migration"
+          "Paula: API refactor (finishing today)",
+          "Rafael: Test suite migration (one file left)"
         ],
         "blockers": [],
         "actions": []
@@ -466,22 +459,22 @@
     {
       "id": "14",
       "scenario": "clean_standup_no_blockers_no_actions",
-      "elapsed_s": 24.87,
+      "elapsed_s": 14.51,
       "status": "success",
       "scores": {
         "done": 1.0,
-        "in_progress": 1.0,
+        "in_progress": 0.6666666666666666,
         "blockers": 1.0,
         "actions": 1.0
       },
-      "score": 1.0,
+      "score": 0.9166666666666666,
       "actual": {
         "done": [
           "Sara: Deployed hotfix"
         ],
         "in_progress": [
           "Sara: Next feature",
-          "Tomas: Reviewing PRs",
+          "Tomas: Reviewing yesterday's PRs",
           "Tomas: User settings page"
         ],
         "blockers": [],
@@ -491,7 +484,7 @@
     {
       "id": "15",
       "scenario": "solo_standup",
-      "elapsed_s": 21.62,
+      "elapsed_s": 13.71,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -502,7 +495,7 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Rachel: Migrate tests to Jest"
+          "Rachel: Migrated tests to Jest"
         ],
         "in_progress": [
           "Rachel: E2E test setup with Playwright"
@@ -514,7 +507,7 @@
     {
       "id": "16",
       "scenario": "sprint_start_nothing_done",
-      "elapsed_s": 31.79,
+      "elapsed_s": 17.36,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -526,10 +519,10 @@
       "actual": {
         "done": [],
         "in_progress": [
-          "Stefan: Scoping new notification feature",
-          "Tina: Investigating API performance ticket",
-          "Ursula: Mobile push notifications implementation",
-          "Ursula: Dev environment setup"
+          "Stefan: New notification feature scoping",
+          "Tina: API performance ticket investigation",
+          "Ursula: Dev environment setup",
+          "Ursula: Mobile push notifications"
         ],
         "blockers": [],
         "actions": []
@@ -538,7 +531,7 @@
     {
       "id": "17",
       "scenario": "external_vendor_blocker",
-      "elapsed_s": 34.82,
+      "elapsed_s": 26.68,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -549,22 +542,17 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Wendy: Built data connector"
+          "Wendy: Built data connector on our side"
         ],
         "in_progress": [
-          "Victor: Salesforce integration (blocked \u2014 support unresponsive)",
+          "Victor: Salesforce integration (blocked)",
           "Wendy: End-to-end testing (pending Salesforce integration)"
         ],
         "blockers": [
           {
-            "description": "Salesforce API documentation outdated and support unresponsive for 3 days \u2014 blocking Salesforce integration work",
-            "owner": "Victor",
+            "description": "Salesforce API documentation outdated and Salesforce support unresponsive for 3 days \u2014 blocking Salesforce integration and end-to-end testing of data connector",
+            "owner": "Victor, Wendy",
             "severity": "high"
-          },
-          {
-            "description": "Victor's Salesforce integration incomplete \u2014 blocking end-to-end connector testing",
-            "owner": "Wendy",
-            "severity": "medium"
           }
         ],
         "actions": [
@@ -579,7 +567,7 @@
     {
       "id": "18",
       "scenario": "resolved_blocker",
-      "elapsed_s": 25.32,
+      "elapsed_s": 18.66,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -590,9 +578,9 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Xenia: Database connection issue fixed",
-          "Xenia: Fix deployed to staging",
-          "Ylan: Reviewed and approved Xenia's fix"
+          "Xenia: Fixed database connection issue",
+          "Xenia: Deployed database connection fix to staging",
+          "Ylan: Reviewed and approved database connection fix"
         ],
         "in_progress": [
           "Xenia: Load testing",
@@ -605,7 +593,7 @@
     {
       "id": "19",
       "scenario": "shared_blocker_multiple_people",
-      "elapsed_s": 39.49,
+      "elapsed_s": 25.91,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -617,13 +605,13 @@
       "actual": {
         "done": [],
         "in_progress": [
-          "Yuri: Deployment work (blocked by CI outage)",
-          "Zara: PRs stuck in queue (blocked by CI outage)",
-          "Adrian: Code review (while blocked by CI outage)"
+          "Yuri: Deployments (blocked by CI)",
+          "Zara: PRs (stuck in CI queue)",
+          "Adrian: Code review (while CI is down)"
         ],
         "blockers": [
           {
-            "description": "CI pipeline down \u2014 blocking all deployments and PR merges",
+            "description": "CI pipeline down since last night \u2014 blocking deploys and PR merges",
             "owner": "Yuri, Zara, Adrian",
             "severity": "high"
           }
@@ -640,7 +628,7 @@
     {
       "id": "20",
       "scenario": "hotfix_crisis",
-      "elapsed_s": 33.52,
+      "elapsed_s": 28.06,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -651,16 +639,16 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Beth: Cleared logs to stabilize production",
-          "Chris: Paged DBA team"
+          "Beth: Cleared old logs to buy 30 minutes",
+          "Chris: Paged the DBA team"
         ],
         "in_progress": [
-          "Beth: Database disk space permanent fix",
-          "Chris: Drafting incident report"
+          "Beth: Database disk space permanent fix (production down)",
+          "Chris: Drafting the incident report"
         ],
         "blockers": [
           {
-            "description": "Production database out of disk space \u2014 site down, blocking all production work",
+            "description": "Production database out of disk space \u2014 site down, blocking proper production fix",
             "owner": "Beth",
             "severity": "high"
           }
@@ -677,7 +665,7 @@
     {
       "id": "21",
       "scenario": "same_as_yesterday",
-      "elapsed_s": 25.59,
+      "elapsed_s": 20.23,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -689,8 +677,8 @@
       "actual": {
         "done": [],
         "in_progress": [
-          "Diana: Billing module refactor (wrapping up tomorrow)",
-          "Evan: Reviewing billing module code (3 files remaining)"
+          "Diana: Billing module refactor (wrap up EOD tomorrow)",
+          "Evan: Billing code review (three files left)"
         ],
         "blockers": [],
         "actions": []
@@ -699,7 +687,7 @@
     {
       "id": "22",
       "scenario": "implicit_blocker_cant_test_until",
-      "elapsed_s": 30.84,
+      "elapsed_s": 23.05,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -713,18 +701,18 @@
           "Fiona: Checkout feature backend"
         ],
         "in_progress": [
-          "Fiona: End-to-end testing (blocked)"
+          "Fiona: Checkout end-to-end testing (pending gateway credentials)"
         ],
         "blockers": [
           {
-            "description": "Payment gateway credentials missing from test environment \u2014 blocking end-to-end checkout testing",
+            "description": "Payment gateway credentials not set up in test environment \u2014 blocking checkout end-to-end testing",
             "owner": "Fiona",
-            "severity": "medium"
+            "severity": "high"
           }
         ],
         "actions": [
           {
-            "task": "Provision payment gateway credentials",
+            "task": "Set up payment gateway credentials",
             "owner": "Gareth",
             "deadline": "this afternoon"
           }
@@ -734,7 +722,7 @@
     {
       "id": "23",
       "scenario": "async_remote_format",
-      "elapsed_s": 20.78,
+      "elapsed_s": 14.69,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -745,8 +733,8 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Greg: Data pipeline refactor completed",
-          "Heidi: PR reviews completed"
+          "Greg: Completed data pipeline refactor",
+          "Heidi: PR reviews"
         ],
         "in_progress": [
           "Greg: New reporting module",
@@ -759,7 +747,7 @@
     {
       "id": "24",
       "scenario": "demo_prep",
-      "elapsed_s": 42.38,
+      "elapsed_s": 21.73,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -770,7 +758,7 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Ivan: Polished demo UI"
+          "Ivan: Polished the UI"
         ],
         "in_progress": [
           "Ivan: Export feature demo flow",
@@ -784,7 +772,7 @@
     {
       "id": "25",
       "scenario": "infrastructure_technical_jargon",
-      "elapsed_s": 27.2,
+      "elapsed_s": 29.53,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -795,21 +783,21 @@
       "score": 1.0,
       "actual": {
         "done": [
-          "Kevin: Updated HPA config \u2014 pods auto-scale correctly"
+          "Kevin: Resolved Kubernetes scaling via HPA configuration update"
         ],
         "in_progress": [
-          "Laura: Terraform state lock troubleshooting"
+          "Laura: Terraform state lock troubleshooting (remote backend stuck)"
         ],
         "blockers": [
           {
-            "description": "Terraform remote backend state lock stuck \u2014 blocking all Terraform operations",
+            "description": "Terraform remote backend state lock stuck \u2014 blocking Terraform operations",
             "owner": "Laura",
             "severity": "high"
           }
         ],
         "actions": [
           {
-            "task": "Unlock Terraform remote backend",
+            "task": "Manually unlock Terraform state",
             "owner": "DevOps",
             "deadline": "ASAP"
           }
@@ -819,7 +807,7 @@
     {
       "id": "26",
       "scenario": "waiting_for_architecture_decision",
-      "elapsed_s": 27.88,
+      "elapsed_s": 23.27,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -830,22 +818,22 @@
       "score": 0.925,
       "actual": {
         "done": [
-          "Mike: Authentication implementation complete"
+          "Mike: Authentication implementation"
         ],
         "in_progress": [
-          "Mike: App authentication integration (blocked)",
-          "Nancy: Mobile authentication integration (blocked)"
+          "Mike: App authentication integration (pending JWT/sessions decision)",
+          "Nancy: Mobile authentication integration (pending JWT/sessions decision)"
         ],
         "blockers": [
           {
-            "description": "Team decision on JWT vs sessions pending \u2014 blocking auth integration on web and mobile",
+            "description": "Team decision on JWT vs sessions pending \u2014 blocking auth integration into app and mobile",
             "owner": "Mike, Nancy",
             "severity": "high"
           }
         ],
         "actions": [
           {
-            "task": "Decide JWT vs sessions",
+            "task": "Make JWT vs sessions decision",
             "owner": "Tech Lead",
             "deadline": "ASAP"
           }
@@ -855,7 +843,7 @@
     {
       "id": "27",
       "scenario": "sprint_velocity_risk",
-      "elapsed_s": 31.04,
+      "elapsed_s": 24.91,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -872,12 +860,12 @@
           {
             "task": "Review sprint commitments and reassign tickets",
             "owner": "Team",
-            "deadline": "ASAP"
+            "deadline": null
           },
           {
-            "task": "Pick up Oliver's tickets",
+            "task": "Pick up reassigned sprint tickets",
             "owner": "Paula",
-            "deadline": "null"
+            "deadline": null
           }
         ]
       }
@@ -885,7 +873,7 @@
     {
       "id": "28",
       "scenario": "new_team_member_onboarding",
-      "elapsed_s": 28.37,
+      "elapsed_s": 24.86,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -898,28 +886,18 @@
         "done": [],
         "in_progress": [
           "Quincy: Dev environment setup (awaiting access)",
-          "Rosa: Quincy onboarding and code review walkthrough"
+          "Rosa: Quincy onboarding \u2014 code review process walkthrough"
         ],
         "blockers": [
           {
-            "description": "Production database access missing \u2014 blocking Quincy from starting any work",
-            "owner": "Quincy",
-            "severity": "high"
-          },
-          {
-            "description": "Jira board access missing \u2014 blocking Quincy from starting any work",
+            "description": "Production database and Jira board access missing \u2014 blocking dev environment setup and getting started",
             "owner": "Quincy",
             "severity": "high"
           }
         ],
         "actions": [
           {
-            "task": "Provision production database access",
-            "owner": "IT",
-            "deadline": "ASAP"
-          },
-          {
-            "task": "Provision Jira board access",
+            "task": "Grant production database and Jira access",
             "owner": "IT",
             "deadline": "ASAP"
           }
@@ -929,7 +907,7 @@
     {
       "id": "29",
       "scenario": "all_clear_simple",
-      "elapsed_s": 21.75,
+      "elapsed_s": 17.36,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -954,7 +932,7 @@
     {
       "id": "30",
       "scenario": "long_mixed_standup",
-      "elapsed_s": 50.34,
+      "elapsed_s": 34.21,
       "status": "success",
       "scores": {
         "done": 1.0,
@@ -966,32 +944,21 @@
       "actual": {
         "done": [
           "Uma: Pushed search indexing service to staging",
-          "Victor: Reviewed and commented on search indexing code",
-          "Wendy: Search UI basic layout done"
+          "Victor: Reviewed search indexing service code",
+          "Wendy: Search UI basic layout"
         ],
         "in_progress": [
-          "Uma: Validation tests running on staging",
-          "Uma: Unicode character handling fix (due noon)",
-          "Uma: Search indexing performance on large datasets",
+          "Uma: Search indexing validation tests",
+          "Uma: Unicode character handling fix (by noon)",
           "Wendy: Search UI autocomplete",
           "Xavier: Legacy search QA (3 failing tests)"
         ],
         "blockers": [],
         "actions": [
           {
-            "task": "Deliver Unicode character handling fix",
+            "task": "Improve large dataset performance",
             "owner": "Uma",
-            "deadline": "Noon today"
-          },
-          {
-            "task": "Resolve remaining code review comments, specifically large dataset performance",
-            "owner": "Uma & Victor",
-            "deadline": "TBD"
-          },
-          {
-            "task": "Clear remaining 3 failing legacy search QA tests",
-            "owner": "Xavier",
-            "deadline": "EOD today"
+            "deadline": null
           }
         ]
       }
