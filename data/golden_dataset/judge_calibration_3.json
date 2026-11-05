@@ -1,0 +1,254 @@
+[
+ {
+  "id": "20",
+  "category": "blockers",
+  "expected": "Production database out of disk space - site down, 30-minute window remaining",
+  "answer": "Production database out of disk space — site down, blocking proper production fix",
+  "kind": "best",
+  "n": 1,
+  "same_meaning": true
+ },
+ {
+  "id": null,
+  "category": "blockers",
+  "expected": "CI pipeline down since last night - blocking all deployments and PR merges",
+  "answer": "CI pipeline down since last night — blocking one nightly test job",
+  "kind": "hard",
+  "n": 2,
+  "same_meaning": false
+ },
+ {
+  "id": "07",
+  "category": "in_progress",
+  "expected": "Production monitoring and logging",
+  "answer": "Peter: Monitoring authentication service logs",
+  "kind": "best",
+  "n": 3,
+  "same_meaning": false
+ },
+ {
+  "id": "11",
+  "category": "in_progress",
+  "expected": "Unit tests for search feature",
+  "answer": "Martin: Signup flow",
+  "kind": "wrong",
+  "n": 4,
+  "same_meaning": false
+ },
+ {
+  "id": "02",
+  "category": "in_progress",
+  "expected": "Responsive layouts",
+  "answer": "Carol: Responsive layouts",
+  "kind": "best",
+  "n": 5,
+  "same_meaning": true
+ },
+ {
+  "id": "19",
+  "category": "actions",
+  "expected": "Fix CI pipeline",
+  "answer": "Restore CI pipeline",
+  "kind": "best",
+  "n": 6,
+  "same_meaning": true
+ },
+ {
+  "id": "27",
+  "category": "actions",
+  "expected": "Paula to pick up Oliver's tickets if sprint goal is at risk",
+  "answer": "Pick up reassigned sprint tickets",
+  "kind": "best",
+  "n": 7,
+  "same_meaning": true
+ },
+ {
+  "id": "01",
+  "category": "blockers",
+  "expected": "Staging environment is down",
+  "answer": "Staging environment down — blocking frontend forms work",
+  "kind": "best",
+  "n": 8,
+  "same_meaning": true
+ },
+ {
+  "id": "09",
+  "category": "blockers",
+  "expected": "Waiting for notification system design approval before starting backend service",
+  "answer": "Notification system design pending review — blocking backend notifications service",
+  "kind": "best",
+  "n": 9,
+  "same_meaning": true
+ },
+ {
+  "id": "16",
+  "category": "in_progress",
+  "expected": "Mobile push notifications dev environment setup",
+  "answer": "Ursula: Dev environment setup",
+  "kind": "best",
+  "n": 10,
+  "same_meaning": true
+ },
+ {
+  "id": "24",
+  "category": "in_progress",
+  "expected": "Onboarding tour demo flow",
+  "answer": "Ivan: Onboarding tour demo flow",
+  "kind": "best",
+  "n": 11,
+  "same_meaning": true
+ },
+ {
+  "id": "03",
+  "category": "done",
+  "expected": "Stripe integration",
+  "answer": "Eve: Unit tests for payment module",
+  "kind": "wrong",
+  "n": 12,
+  "same_meaning": false
+ },
+ {
+  "id": "04",
+  "category": "done",
+  "expected": "Dashboard UI mockups",
+  "answer": "Henry: Dashboard UI mockups",
+  "kind": "best",
+  "n": 13,
+  "same_meaning": true
+ },
+ {
+  "id": "10",
+  "category": "done",
+  "expected": "Legacy database migration to new architecture",
+  "answer": "Yara: Migrated legacy database to new architecture",
+  "kind": "best",
+  "n": 14,
+  "same_meaning": true
+ },
+ {
+  "id": "26",
+  "category": "actions",
+  "expected": "Make JWT vs sessions architecture decision",
+  "answer": "Make JWT vs sessions decision",
+  "kind": "best",
+  "n": 15,
+  "same_meaning": true
+ },
+ {
+  "id": null,
+  "category": "in_progress",
+  "expected": "E2E test setup with Playwright",
+  "answer": "Rachel: Finished E2E test setup with Playwright",
+  "kind": "hard",
+  "n": 16,
+  "same_meaning": false
+ },
+ {
+  "id": "06",
+  "category": "blockers",
+  "expected": "Mobile app compilation broken - blocking all mobile work",
+  "answer": "Mobile app compilation broken — blocking mobile app work",
+  "kind": "best",
+  "n": 17,
+  "same_meaning": true
+ },
+ {
+  "id": "20",
+  "category": "actions",
+  "expected": "DBA team to implement permanent disk space fix",
+  "answer": "Implement proper disk space fix",
+  "kind": "best",
+  "n": 18,
+  "same_meaning": true
+ },
+ {
+  "id": "17",
+  "category": "actions",
+  "expected": "Escalate Salesforce support ticket",
+  "answer": "Escalate Salesforce support ticket",
+  "kind": "best",
+  "n": 19,
+  "same_meaning": true
+ },
+ {
+  "id": "06",
+  "category": "done",
+  "expected": "Tests updated for bug fixes",
+  "answer": "Mona: Updated checkout tests accordingly",
+  "kind": "best",
+  "n": 20,
+  "same_meaning": true
+ },
+ {
+  "id": "18",
+  "category": "in_progress",
+  "expected": "Load testing",
+  "answer": "Ylan: Reporting module",
+  "kind": "wrong",
+  "n": 21,
+  "same_meaning": false
+ },
+ {
+  "id": "11",
+  "category": "done",
+  "expected": "Login page",
+  "answer": "Martin: Login page",
+  "kind": "best",
+  "n": 22,
+  "same_meaning": true
+ },
+ {
+  "id": "02",
+  "category": "blockers",
+  "expected": "Waiting for code review feedback from senior engineer",
+  "answer": "Code review feedback from senior engineer pending — blocking Dave's work",
+  "kind": "best",
+  "n": 23,
+  "same_meaning": true
+ },
+ {
+  "id": "30",
+  "category": "actions",
+  "expected": "Resolve search indexing performance on large datasets",
+  "answer": "Improve large dataset performance",
+  "kind": "best",
+  "n": 24,
+  "same_meaning": true
+ },
+ {
+  "id": "30",
+  "category": "done",
+  "expected": "Code review of Uma's search indexing code",
+  "answer": "Victor: Reviewed search indexing service code",
+  "kind": "best",
+  "n": 25,
+  "same_meaning": true
+ },
+ {
+  "id": "18",
+  "category": "in_progress",
+  "expected": "Reporting module",
+  "answer": "Ylan: Reporting module",
+  "kind": "best",
+  "n": 26,
+  "same_meaning": true
+ },
+ {
+  "id": "30",
+  "category": "in_progress",
+  "expected": "Search UI autocomplete (basic layout done)",
+  "answer": "Wendy: Search UI autocomplete",
+  "kind": "best",
+  "n": 27,
+  "same_meaning": true
+ },
+ {
+  "id": "02",
+  "category": "done",
+  "expected": "Redesign components merged",
+  "answer": "Carol: Merged redesign components",
+  "kind": "best",
+  "n": 28,
+  "same_meaning": true
+ }
+]

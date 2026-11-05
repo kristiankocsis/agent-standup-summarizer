@@ -51,3 +51,4 @@ data/eval_results_partial.json
 # OS
 .DS_Store
 Thumbs.db
+data/eval_results_semantic.json

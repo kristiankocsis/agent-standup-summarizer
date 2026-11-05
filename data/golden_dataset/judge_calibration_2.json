@@ -1,0 +1,263 @@
+[
+ {
+  "id": "10",
+  "category": "actions",
+  "expected": "Establish 90-day deprecation window for old API endpoints",
+  "answer": "Approve 90-day deprecation window",
+  "kind": "best",
+  "n": 1,
+  "same_meaning": false
+ },
+ {
+  "id": "20",
+  "category": "done",
+  "expected": "Temporary fix applied - cleared old logs to restore production",
+  "answer": "Chris: Paged the DBA team",
+  "kind": "wrong",
+  "n": 2,
+  "same_meaning": false
+ },
+ {
+  "id": "04",
+  "category": "blockers",
+  "expected": "Cloud credentials not yet received from IT - blocking infrastructure setup",
+  "answer": "Cloud credentials from IT pending — blocking infrastructure setup",
+  "kind": "best",
+  "n": 3,
+  "same_meaning": true
+ },
+ {
+  "id": "05",
+  "category": "actions",
+  "expected": "Complete database schema documentation",
+  "answer": "Fill in schema documentation gaps",
+  "kind": "best",
+  "n": 4,
+  "same_meaning": true
+ },
+ {
+  "id": "06",
+  "category": "actions",
+  "expected": "Debug mobile app build failure",
+  "answer": "Review checkout edge case",
+  "kind": "wrong",
+  "n": 5,
+  "same_meaning": false
+ },
+ {
+  "id": "22",
+  "category": "actions",
+  "expected": "Set up payment gateway credentials in test environment",
+  "answer": "Set up payment gateway credentials",
+  "kind": "best",
+  "n": 6,
+  "same_meaning": true
+ },
+ {
+  "id": "01",
+  "category": "actions",
+  "expected": "Restore staging environment",
+  "answer": "Restore staging environment",
+  "kind": "best",
+  "n": 7,
+  "same_meaning": true
+ },
+ {
+  "id": "10",
+  "category": "actions",
+  "expected": "Notify all API consumers about endpoint deprecation",
+  "answer": "Notify all API consumers",
+  "kind": "best",
+  "n": 8,
+  "same_meaning": true
+ },
+ {
+  "id": "03",
+  "category": "blockers",
+  "expected": "Bug found in refund logic - blocking payment flow testing",
+  "answer": "Bug in refund logic — blocking payment flow testing",
+  "kind": "best",
+  "n": 9,
+  "same_meaning": true
+ },
+ {
+  "id": "08",
+  "category": "done",
+  "expected": "Caching layer rewritten with 40% performance improvement",
+  "answer": "Sam: Rewrote caching layer (40% benchmark improvement)",
+  "kind": "best",
+  "n": 10,
+  "same_meaning": true
+ },
+ {
+  "id": "03",
+  "category": "actions",
+  "expected": "Fix refund logic bug",
+  "answer": "Fix refund logic bug",
+  "kind": "best",
+  "n": 11,
+  "same_meaning": true
+ },
+ {
+  "id": "05",
+  "category": "blockers",
+  "expected": "Database schema documentation is incomplete - blocking dashboard queries",
+  "answer": "Database schema documentation incomplete — blocking dashboard queries",
+  "kind": "best",
+  "n": 12,
+  "same_meaning": true
+ },
+ {
+  "id": "27",
+  "category": "actions",
+  "expected": "Review sprint commitments and reassign tickets to recover velocity",
+  "answer": "Review sprint commitments and reassign tickets",
+  "kind": "best",
+  "n": 13,
+  "same_meaning": true
+ },
+ {
+  "id": "15",
+  "category": "done",
+  "expected": "Test migration to Jest",
+  "answer": "Rachel: Migrated tests to Jest",
+  "kind": "best",
+  "n": 14,
+  "same_meaning": true
+ },
+ {
+  "id": "29",
+  "category": "done",
+  "expected": "Login PR reviewed and approved",
+  "answer": "Tanya: Reviewed and approved login PR",
+  "kind": "best",
+  "n": 15,
+  "same_meaning": true
+ },
+ {
+  "id": "09",
+  "category": "actions",
+  "expected": "Review and approve notification system design",
+  "answer": "Review notification system design",
+  "kind": "best",
+  "n": 16,
+  "same_meaning": false
+ },
+ {
+  "id": "06",
+  "category": "blockers",
+  "expected": "Edge case found in checkout flow - needs developer review",
+  "answer": "Mobile app compilation broken — blocking mobile app work",
+  "kind": "wrong",
+  "n": 17,
+  "same_meaning": false
+ },
+ {
+  "id": "06",
+  "category": "actions",
+  "expected": "Debug mobile app build failure",
+  "answer": "Fix mobile app compilation",
+  "kind": "best",
+  "n": 18,
+  "same_meaning": false
+ },
+ {
+  "id": "08",
+  "category": "actions",
+  "expected": "Address monitoring dashboard latency",
+  "answer": "Fix monitoring dashboard metrics delay",
+  "kind": "best",
+  "n": 19,
+  "same_meaning": true
+ },
+ {
+  "id": "20",
+  "category": "done",
+  "expected": "Temporary fix applied - cleared old logs to restore production",
+  "answer": "Beth: Cleared old logs to buy 30 minutes",
+  "kind": "best",
+  "n": 20,
+  "same_meaning": true
+ },
+ {
+  "id": "22",
+  "category": "blockers",
+  "expected": "Payment gateway credentials not configured in test environment - blocking end-to-end checkout testing",
+  "answer": "Payment gateway credentials not set up in test environment — blocking checkout end-to-end testing",
+  "kind": "best",
+  "n": 21,
+  "same_meaning": true
+ },
+ {
+  "id": "25",
+  "category": "blockers",
+  "expected": "Terraform remote backend stuck in state lock - blocking all infrastructure changes",
+  "answer": "Terraform remote backend state lock stuck — blocking Terraform operations",
+  "kind": "best",
+  "n": 22,
+  "same_meaning": false
+ },
+ {
+  "id": "03",
+  "category": "done",
+  "expected": "Stripe integration",
+  "answer": "Eve: Stripe integration",
+  "kind": "best",
+  "n": 23,
+  "same_meaning": true
+ },
+ {
+  "id": "06",
+  "category": "actions",
+  "expected": "Review and fix checkout edge case",
+  "answer": "Review checkout edge case",
+  "kind": "best",
+  "n": 24,
+  "same_meaning": false
+ },
+ {
+  "id": "02",
+  "category": "actions",
+  "expected": "Provide code review feedback",
+  "answer": "Provide code review feedback",
+  "kind": "best",
+  "n": 25,
+  "same_meaning": true
+ },
+ {
+  "id": "04",
+  "category": "actions",
+  "expected": "Request and provision cloud credentials",
+  "answer": "Provision cloud credentials",
+  "kind": "best",
+  "n": 26,
+  "same_meaning": true
+ },
+ {
+  "id": "07",
+  "category": "actions",
+  "expected": "Restore staging environment from backup",
+  "answer": "Restore staging environment",
+  "kind": "best",
+  "n": 27,
+  "same_meaning": true
+ },
+ {
+  "id": "25",
+  "category": "actions",
+  "expected": "Manually unlock Terraform remote backend state",
+  "answer": "Manually unlock Terraform state",
+  "kind": "best",
+  "n": 28,
+  "same_meaning": true
+ },
+ {
+  "id": "28",
+  "category": "actions",
+  "expected": "Grant Quincy access to production database and Jira",
+  "answer": "Grant production database and Jira access",
+  "kind": "best",
+  "n": 29,
+  "same_meaning": true
+ }
+]

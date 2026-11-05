@@ -1,0 +1,302 @@
+[
+ {
+  "id": "08",
+  "category": "in_progress",
+  "expected": "Code review of caching implementation",
+  "answer": "Uma: Monitoring dashboard real-time metrics fix",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 1,
+  "same_meaning": false
+ },
+ {
+  "id": "24",
+  "category": "in_progress",
+  "expected": "Backup demo video recording",
+  "answer": "Julia: Recording backup demo video",
+  "jaccard": 0.8,
+  "kind": "clear",
+  "n": 2,
+  "same_meaning": true
+ },
+ {
+  "id": "26",
+  "category": "blockers",
+  "expected": "Architecture decision needed: JWT vs sessions - blocking auth integration for both web and mobile",
+  "answer": "Team decision on JWT vs sessions pending — blocking auth integration into app and mobile",
+  "jaccard": 0.47,
+  "kind": "clear",
+  "n": 3,
+  "same_meaning": true
+ },
+ {
+  "id": "12",
+  "category": "in_progress",
+  "expected": "Signup flow development",
+  "answer": "Oscar: Seed data scripts",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 4,
+  "same_meaning": false
+ },
+ {
+  "id": "09",
+  "category": "in_progress",
+  "expected": "Notification system design (draft sent for review)",
+  "answer": "Vera: Notification system design (draft sent for review)",
+  "jaccard": 0.88,
+  "kind": "clear",
+  "n": 5,
+  "same_meaning": true
+ },
+ {
+  "id": "14",
+  "category": "in_progress",
+  "expected": "PR reviews",
+  "answer": "Tomas: Reviewing yesterday's PRs",
+  "jaccard": 0.17,
+  "kind": "near",
+  "n": 6,
+  "same_meaning": true
+ },
+ {
+  "id": "21",
+  "category": "in_progress",
+  "expected": "Billing module refactor (expected completion: tomorrow EOD)",
+  "answer": "Diana: Billing module refactor (wrap up EOD tomorrow)",
+  "jaccard": 0.5,
+  "kind": "clear",
+  "n": 7,
+  "same_meaning": true
+ },
+ {
+  "id": "05",
+  "category": "in_progress",
+  "expected": "Analytics dashboard queries",
+  "answer": "Karen: Building dashboard queries (blocked on schema docs)",
+  "jaccard": 0.22,
+  "kind": "near",
+  "n": 8,
+  "same_meaning": true
+ },
+ {
+  "id": null,
+  "category": null,
+  "expected": "Database migration with passing tests",
+  "answer": "Alice: Database migration, tests still failing",
+  "jaccard": null,
+  "kind": "hard",
+  "n": 9,
+  "same_meaning": false
+ },
+ {
+  "id": "11",
+  "category": "in_progress",
+  "expected": "Signup flow",
+  "answer": "Jana: Unit tests for search feature",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 10,
+  "same_meaning": false
+ },
+ {
+  "id": "04",
+  "category": "in_progress",
+  "expected": "Backend API development",
+  "answer": "Iris: Infrastructure setup (blocked on cloud credentials)",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 11,
+  "same_meaning": false
+ },
+ {
+  "id": "01",
+  "category": "in_progress",
+  "expected": "Performance optimization",
+  "answer": "Alice: Frontend forms (blocked by staging down)",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 12,
+  "same_meaning": false
+ },
+ {
+  "id": "19",
+  "category": "blockers",
+  "expected": "CI pipeline down since last night - blocking all deployments and PR merges",
+  "answer": "CI pipeline down since last night — blocking deploys and PR merges",
+  "jaccard": 0.77,
+  "kind": "clear",
+  "n": 13,
+  "same_meaning": true
+ },
+ {
+  "id": "09",
+  "category": "in_progress",
+  "expected": "Notification system design (draft sent for review)",
+  "answer": "Xander: SDK documentation (50% done, due Thursday)",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 14,
+  "same_meaning": false
+ },
+ {
+  "id": "05",
+  "category": "done",
+  "expected": "User data extracted for analytics",
+  "answer": "Karen: Pulled all user data for analytics",
+  "jaccard": 0.5,
+  "kind": "clear",
+  "n": 15,
+  "same_meaning": true
+ },
+ {
+  "id": "07",
+  "category": "in_progress",
+  "expected": "Production monitoring and logging",
+  "answer": "Ruth: Customer onboarding flow end-to-end testing (blocked)",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 16,
+  "same_meaning": false
+ },
+ {
+  "id": null,
+  "category": null,
+  "expected": "CI pipeline down since last night - blocking all deployments and PR merges",
+  "answer": "CI pipeline restored overnight, deployments and PR merges unblocked",
+  "jaccard": null,
+  "kind": "hard",
+  "n": 17,
+  "same_meaning": false
+ },
+ {
+  "id": "08",
+  "category": "in_progress",
+  "expected": "Monitoring dashboard real-time metrics fix",
+  "answer": "Uma: Monitoring dashboard real-time metrics fix",
+  "jaccard": 0.86,
+  "kind": "clear",
+  "n": 18,
+  "same_meaning": true
+ },
+ {
+  "id": "02",
+  "category": "in_progress",
+  "expected": "Responsive layouts",
+  "answer": "Dave: Code review feedback (blocked)",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 19,
+  "same_meaning": false
+ },
+ {
+  "id": "29",
+  "category": "in_progress",
+  "expected": "Profile settings page",
+  "answer": "Steve: Profile settings page",
+  "jaccard": 0.75,
+  "kind": "clear",
+  "n": 20,
+  "same_meaning": true
+ },
+ {
+  "id": "13",
+  "category": "in_progress",
+  "expected": "API refactor (almost complete, finishing today)",
+  "answer": "Paula: API refactor (finishing today)",
+  "jaccard": 0.57,
+  "kind": "clear",
+  "n": 21,
+  "same_meaning": true
+ },
+ {
+  "id": "05",
+  "category": "in_progress",
+  "expected": "Schema documentation review",
+  "answer": "Karen: Building dashboard queries (blocked on schema docs)",
+  "jaccard": 0.1,
+  "kind": "near",
+  "n": 22,
+  "same_meaning": false
+ },
+ {
+  "id": "25",
+  "category": "in_progress",
+  "expected": "Terraform state lock troubleshooting",
+  "answer": "Laura: Terraform state lock troubleshooting (remote backend stuck)",
+  "jaccard": 0.5,
+  "kind": "clear",
+  "n": 23,
+  "same_meaning": true
+ },
+ {
+  "id": "04",
+  "category": "in_progress",
+  "expected": "Product feedback on mockups",
+  "answer": "Henry: Presenting dashboard UI mockups to product team",
+  "jaccard": 0.2,
+  "kind": "near",
+  "n": 24,
+  "same_meaning": false
+ },
+ {
+  "id": "08",
+  "category": "in_progress",
+  "expected": "Code review of caching implementation",
+  "answer": "Tara: Reviewing cache rewrite (feedback by EOD)",
+  "jaccard": 0.2,
+  "kind": "near",
+  "n": 25,
+  "same_meaning": true
+ },
+ {
+  "id": null,
+  "category": null,
+  "expected": "Monitoring dashboard real-time metrics fix",
+  "answer": "Uma: Monitoring dashboard design review",
+  "jaccard": null,
+  "kind": "hard",
+  "n": 26,
+  "same_meaning": false
+ },
+ {
+  "id": null,
+  "category": null,
+  "expected": "API refactor (almost complete, finishing today)",
+  "answer": "Paula: API refactor not started yet",
+  "jaccard": null,
+  "kind": "hard",
+  "n": 27,
+  "same_meaning": false
+ },
+ {
+  "id": "04",
+  "category": "in_progress",
+  "expected": "Product feedback on mockups",
+  "answer": "Jack: Backend API (ready for testing)",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 28,
+  "same_meaning": false
+ },
+ {
+  "id": "01",
+  "category": "done",
+  "expected": "Database migration with passing tests",
+  "answer": "Alice: User authentication API endpoint",
+  "jaccard": 0.0,
+  "kind": "wrong",
+  "n": 29,
+  "same_meaning": false
+ },
+ {
+  "id": "06",
+  "category": "blockers",
+  "expected": "Edge case found in checkout flow - needs developer review",
+  "answer": "Unaccounted checkout edge case — blocking checkout QA sign-off",
+  "jaccard": 0.21,
+  "kind": "near",
+  "n": 30,
+  "same_meaning": false
+ }
+]

@@ -81,6 +81,22 @@ python -m tests.eval_golden_dataset --ids "04,17" # re-run specific examples
 
 Partial runs (`--limit`/`--ids`) write to a separate git-ignored file so they never overwrite the full-suite baseline in `data/eval_results.json`.
 
+### Tested and not adopted: a meaning-based score
+
+Token overlap can't see synonyms, so I tested a model as a judge of whether an agent item means the same as the expected one. I labelled the test pairs myself and set the bar before each run: at least 90% agreement with my labels and no deliberately wrong pair accepted.
+
+The Haiku 5.5 judge passed the first round, which would have made it official. Rescoring then gave about 80%, with Actions at 60%, and the set turned out to have no Actions pairs, so I put that rule on hold. A second set chosen by section failed at 20/29. After I wrote explicit matching rules, the result on 28 new pairs was:
+
+| Method | Agreement with my labels (bar: 26/28) | Wrong accepts / wrong rejects |
+|---|---|---|
+| Haiku 5.5 judge | 18–19/28 | 1 / 8–9 |
+| Opus 5.5 judge | 24/28 | 0 / 4 |
+| Token overlap | 25/28 | 3 / 0 |
+
+No method passed, including token overlap, which accepted 2 of the 5 deliberately wrong pairs. I kept token overlap as the official score because nothing better passed, not because it passed.
+
+This is a small check with limits. 22 of the 28 pairs are matches, so always answering yes would reach 22/28. I changed four labels after the task was explained to me again, and two wrong pairs were written to test status and scope, so they aren't agent output. Some rejections may be my labels and not the judge. So this doesn't say how far 97.6% is from the true score, only that token overlap can miss a change in status or scope. The judge and its labelled pairs are in `tests/semantic_judge.py` and `data/golden_dataset/`.
+
 ## Streamlit UI
 
 Run the web interface locally:
