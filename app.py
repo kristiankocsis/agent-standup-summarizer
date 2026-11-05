@@ -208,6 +208,9 @@ if run_btn and (transcript or "").strip():
         "elapsed":    elapsed,
     })
 
+    if result.get("closing_unfinished"):
+        st.warning("The model's last message did not finish, so this summary may be incomplete.")
+
     # Empty sections alone can't tell a non-standup from a quiet standup, so the
     # wording stays neutral and the model's reply explains. Plain text, because
     # the reply can echo whatever was pasted in.

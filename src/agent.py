@@ -48,6 +48,7 @@ class AgentState(TypedDict):
     messages: Annotated[list, operator.add]  # accumulates; each node appends
     iterations: int                           # replaced each call_llm step
     structured_output: dict | None            # populated when format_output is called
+    closing_unfinished: bool                  # last message stopped early after a summary
 
 
 # ── Tool schemas (Anthropic format) ────────────────────────────────────────
@@ -139,9 +140,12 @@ def call_llm(state: AgentState) -> dict:
             "so the summary would be incomplete."
         )
 
+    # The text may have been leading up to another summary call, so the app
+    # can't treat this summary as certainly final.
     return {
         "messages": [{"role": "assistant", "content": response.content}],
         "iterations": state["iterations"] + 1,
+        "closing_unfinished": unfinished,
     }
 
 
@@ -249,6 +253,7 @@ def run_agent(transcript: str, progress_callback=None) -> dict:
         "messages": [{"role": "user", "content": f"Analyze this standup transcript:\n\n{transcript}"}],
         "iterations": 0,
         "structured_output": None,
+        "closing_unfinished": False,
     }
 
     try:
@@ -283,6 +288,7 @@ def run_agent(transcript: str, progress_callback=None) -> dict:
             "status": "success",
             "output": output_text,
             "structured_output": final_state.get("structured_output"),
+            "closing_unfinished": final_state["closing_unfinished"],
             "iterations": final_state["iterations"],
             "transcript_length": len(transcript),
         }

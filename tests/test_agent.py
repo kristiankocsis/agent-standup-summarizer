@@ -361,6 +361,75 @@ def test_run_agent_keeps_model_text_when_there_is_no_summary():
     assert result["output"] == "Please paste a real standup."
 
 
+def test_run_agent_flags_an_unfinished_closing_message():
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("max_tokens", _text("Here is the summ")),
+    )
+    assert result["closing_unfinished"] is True
+
+
+def test_run_agent_does_not_flag_a_normal_run():
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("end_turn", _text("Here is the summary.")),
+    )
+    assert result["closing_unfinished"] is False
+
+
+def test_app_shows_a_note_with_a_summary_when_the_last_message_did_not_finish():
+    summary = {**_EMPTY_SUMMARY, "done": ["Alice: API"]}
+    app = _run_app({**_success_result(summary, "Here is the summ"), "closing_unfinished": True})
+    assert len(app.warning) == 1 and "did not finish" in app.warning[0].value
+    assert any("Done (1)" in s.value for s in app.subheader)
+
+
+def test_app_shows_the_note_with_an_empty_summary_too():
+    app = _run_app({**_success_result(_EMPTY_SUMMARY, "This is a rec"), "closing_unfinished": True})
+    warnings = [w.value for w in app.warning]
+    assert len(warnings) == 2
+    assert any("did not finish" in w for w in warnings)
+    assert any("empty" in w for w in warnings)
+
+
+def test_run_agent_flags_a_refused_closing_message():
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("refusal"),
+    )
+    assert result["closing_unfinished"] is True
+
+
+def _run_app_with_model_replies(*replies):
+    # Real run_agent and real app; only the model's replies are fake.
+    orchestrator = iter(replies)
+    app = AppTest.from_file(str(Path(__file__).parent.parent / "app.py"), default_timeout=30)
+    with patch.object(agent_module, "_client", _fake_client(lambda **kw: next(orchestrator))):
+        app.run()
+        app.text_area(key="transcript_input").set_value("Alice: finished the API.").run()
+        next(b for b in app.button if b.label == "Summarize").click().run()
+    assert not app.exception, app.exception
+    return app
+
+
+def test_app_shows_summary_and_note_after_a_cut_off_model_reply():
+    app = _run_app_with_model_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("max_tokens", _text("Here is the summ")),
+    )
+    assert len(app.warning) == 1 and "did not finish" in app.warning[0].value
+    assert any("Done (1)" in s.value for s in app.subheader)
+
+
+def test_app_shows_no_note_after_a_normal_model_reply():
+    app = _run_app_with_model_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("end_turn", _text("Here is the summary.")),
+    )
+    assert len(app.warning) == 0
+    assert any("Done (1)" in s.value for s in app.subheader)
+
+
 def test_app_shows_a_summary_with_items_in_any_one_section():
     sections = {
         "in_progress": ["Bob: tests"],
