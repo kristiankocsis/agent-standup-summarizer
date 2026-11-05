@@ -127,6 +127,14 @@ def call_llm(state: AgentState) -> dict:
         print(f"  stop_reason={response.stop_reason}" +
               (f"  tools={tool_calls}" if tool_calls else ""))
 
+    # tool_use is a normal stop here, unlike in the extraction calls. Stopping
+    # now also keeps a tool from running on a cut-off tool call.
+    if response.stop_reason not in ("end_turn", "tool_use"):
+        raise LLMResponseIncomplete(
+            f"The model's reply did not finish (stop_reason: {response.stop_reason}), "
+            "so the summary would be incomplete."
+        )
+
     return {
         "messages": [{"role": "assistant", "content": response.content}],
         "iterations": state["iterations"] + 1,

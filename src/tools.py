@@ -16,9 +16,9 @@ except Exception:
 
 
 class LLMResponseIncomplete(RuntimeError):
-    """An extraction reply did not end normally (cut off or refused), so any
-    summary built on it would be incomplete. call_tools re-raises this to fail
-    the run instead of passing the error to the model."""
+    """A model reply did not end normally (cut off or refused), so any summary
+    built on it would be incomplete. It must reach run_agent, which reports the
+    failure, so call_tools re-raises it instead of passing it to the model."""
 
 
 def _first_text(response) -> str:

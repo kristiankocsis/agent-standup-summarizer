@@ -187,6 +187,53 @@ def test_run_agent_fails_when_extraction_reply_is_refused():
     assert "refusal" in result["error"]
 
 
+def _run_agent_with_main_loop_reply(reply):
+    # Returns the run's result and every extraction call a tool made.
+    tool_calls = []
+
+    def extraction(**kwargs):
+        tool_calls.append(kwargs)
+        return _reply("end_turn", _text("{}"))
+
+    orchestrator = iter([reply, _reply("end_turn", _text("Summary"))])
+    with patch.object(agent_module, "_client", _fake_client(lambda **kw: next(orchestrator))), \
+            patch.object(tools_module, "_client", _fake_client(extraction)):
+        return run_agent("Alice: blocked on staging."), tool_calls
+
+
+def test_run_agent_fails_when_main_loop_reply_is_cut_off():
+    result, _ = _run_agent_with_main_loop_reply(_reply("max_tokens", _text("Partial summary")))
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "max_tokens" in result["error"]
+
+
+def test_run_agent_fails_when_main_loop_reply_is_refused():
+    result, _ = _run_agent_with_main_loop_reply(_reply("refusal"))
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "refusal" in result["error"]
+
+
+def test_run_agent_runs_no_tool_from_a_cut_off_tool_call():
+    tool_call = SimpleNamespace(
+        type="tool_use", id="t1", name="extract_blockers",
+        input={"transcript": "Alice: blocked"},
+    )
+    result, tool_calls = _run_agent_with_main_loop_reply(_reply("max_tokens", tool_call))
+    assert tool_calls == [], "a tool ran from a cut-off tool call"
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "max_tokens" in result["error"]
+
+
+def test_run_agent_succeeds_on_a_normal_run():
+    tool_call = SimpleNamespace(
+        type="tool_use", id="t1", name="format_output",
+        input={"done": ["API"], "in_progress": [], "blockers": [], "actions": []},
+    )
+    result, _ = _run_agent_with_main_loop_reply(_reply("tool_use", tool_call))
+    assert result["status"] == "success", f"status was {result['status']}: {result.get('error')}"
+    assert result["structured_output"]["done"] == ["API"]
+
+
 # ── Plain runner (ASCII output for Windows cp1250 console) ─────────────────
 
 if __name__ == "__main__":
