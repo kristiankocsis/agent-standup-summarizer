@@ -182,10 +182,7 @@ def evaluate_example(example: dict) -> dict:
     if result["status"] != "success":
         return {**base, "status": "agent_error", "error": result.get("error"), "score": 0.0}
 
-    actual = result.get("structured_output")
-    if actual is None:
-        # Agent didn't call format_output — structural failure
-        return {**base, "status": "no_structured_output", "score": 0.0}
+    actual = result["structured_output"]
 
     scores = {
         "done":        score_text_list(actual.get("done", []),        expected.get("done", [])),

@@ -188,12 +188,7 @@ if run_btn and (transcript or "").strip():
             expanded=False,
         )
 
-    summary = result.get("structured_output")
-
-    if summary is None:
-        st.warning("Agent finished but produced no structured output.")
-        st.text(result.get("output", ""))
-        st.stop()
+    summary = result["structured_output"]
 
     counts = {
         cat: len(summary.get(cat) or [])
