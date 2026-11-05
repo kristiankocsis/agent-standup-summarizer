@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 load_dotenv(Path(__file__).parent.parent / ".env.test", override=True)
 
 from langgraph.graph import END
+from streamlit.testing.v1 import AppTest
 
 from src import agent as agent_module
 from src import tools as tools_module
@@ -301,6 +302,84 @@ def test_run_agent_treats_an_empty_summary_as_a_summary():
     )
     assert result["status"] == "success", f"status was {result['status']}: {result.get('error')}"
     assert result["structured_output"]["done"] == []
+
+
+# ── Streamlit app: empty summaries ─────────────────────────────────────────
+
+_EMPTY_SUMMARY = {"done": [], "in_progress": [], "blockers": [], "actions": []}
+
+
+def _run_app(result):
+    app = AppTest.from_file(str(Path(__file__).parent.parent / "app.py"), default_timeout=30)
+    with patch("src.agent.run_agent", return_value=result):
+        app.run()
+        app.text_area(key="transcript_input").set_value("Apple cake: mix flour and eggs.").run()
+        next(b for b in app.button if b.label == "Summarize").click().run()
+    assert not app.exception, app.exception
+    return app
+
+
+def _success_result(summary, output):
+    return {"status": "success", "structured_output": summary, "output": output, "iterations": 4}
+
+
+def test_app_shows_model_reply_for_an_empty_summary():
+    app = _run_app(_success_result(_EMPTY_SUMMARY, "This is a recipe, not a standup."))
+    assert len(app.warning) == 1 and "empty" in app.warning[0].value
+    assert [t.value for t in app.text] == ["This is a recipe, not a standup."]
+    assert len(app.success) == 0, "the empty summary was shown as a success"
+    assert not any("great standup" in c.value for c in app.caption)
+    assert any("Recent runs" in s.value for s in app.sidebar.subheader), "history disappeared"
+
+
+def test_app_explains_an_empty_summary_without_a_model_reply():
+    app = _run_app(_success_result(_EMPTY_SUMMARY, ""))
+    assert len(app.warning) == 1 and "empty" in app.warning[0].value
+    assert [t.value for t in app.text] == ["The model did not add an explanation."]
+
+
+def test_app_treats_a_blank_model_reply_as_no_reply():
+    app = _run_app(_success_result(_EMPTY_SUMMARY, "  \n "))
+    assert [t.value for t in app.text] == ["The model did not add an explanation."]
+
+
+def test_app_shows_an_error_for_a_run_without_a_summary():
+    app = _run_app({"status": "error", "error": "No summary."})
+    assert len(app.error) == 1 and "No summary." in app.error[0].value
+    assert len(app.warning) == 0
+
+
+def test_app_shows_model_reply_under_an_error():
+    app = _run_app({"status": "error", "error": "No summary.", "output": "This is a recipe."})
+    assert len(app.error) == 1
+    assert [t.value for t in app.text] == ["This is a recipe."]
+
+
+def test_run_agent_keeps_model_text_when_there_is_no_summary():
+    result = _run_agent_with_replies(_reply("end_turn", _text("Please paste a real standup.")))
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert result["output"] == "Please paste a real standup."
+
+
+def test_app_shows_a_summary_with_items_in_any_one_section():
+    sections = {
+        "in_progress": ["Bob: tests"],
+        "blockers": [{"description": "CI down", "owner": "Bob", "severity": "high"}],
+        "actions": [{"task": "Fix CI", "owner": "Bob", "deadline": "today"}],
+    }
+    for name, items in sections.items():
+        app = _run_app(_success_result({**_EMPTY_SUMMARY, name: items}, "Summary"))
+        assert len(app.warning) == 0, f"warning shown with items in {name}"
+        assert len(app.success) == 1, f"no success shown with items in {name}"
+
+
+def test_app_shows_a_normal_summary_as_before():
+    summary = {**_EMPTY_SUMMARY, "done": ["Alice: API"]}
+    app = _run_app(_success_result(summary, "Summary"))
+    assert len(app.warning) == 0
+    assert len(app.success) == 1
+    assert any("Done (1)" in s.value for s in app.subheader)
+    assert any("Recent runs" in s.value for s in app.sidebar.subheader)
 
 
 # ── Plain runner (ASCII output for Windows cp1250 console) ─────────────────

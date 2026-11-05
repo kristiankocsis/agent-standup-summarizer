@@ -92,6 +92,28 @@ TOOL_LABELS = {
 if "history" not in st.session_state:
     st.session_state.history = []
 
+
+def _render_history():
+    with st.sidebar:
+        if st.session_state.history:
+            st.divider()
+            st.subheader("🕒 Recent runs")
+            for i, run in enumerate(reversed(st.session_state.history[-5:])):
+                c = run["counts"]
+                total = sum(c.values())
+                with st.expander(f"{run['time']}  ·  {total} items", expanded=False):
+                    st.caption(
+                        f"✅ {c['done']} done  "
+                        f"🔄 {c['in_progress']} in progress  "
+                        f"🚧 {c['blockers']} blockers  "
+                        f"📋 {c['actions']} actions"
+                    )
+                    st.caption(f"{run['iterations']} iterations · {run['elapsed']:.1f}s")
+                    if st.button("Restore transcript", key=f"restore_{i}"):
+                        st.session_state["transcript_input"] = run["transcript"]
+                        st.rerun()
+
+
 # ── Sidebar ────────────────────────────────────────────────────────────────
 
 with st.sidebar:
@@ -154,6 +176,10 @@ if run_btn and (transcript or "").strip():
         if result["status"] == "error":
             status.update(label="Agent failed", state="error")
             st.error(f"Error: {result.get('error')}")
+            # Plain text, because the reply can echo whatever was pasted in.
+            reply = (result.get("output") or "").strip()
+            if reply:
+                st.text(reply)
             st.stop()
 
         status.update(
@@ -181,6 +207,16 @@ if run_btn and (transcript or "").strip():
         "iterations": result["iterations"],
         "elapsed":    elapsed,
     })
+
+    # Empty sections alone can't tell a non-standup from a quiet standup, so the
+    # wording stays neutral and the model's reply explains. Plain text, because
+    # the reply can echo whatever was pasted in.
+    if not any(counts.values()):
+        st.warning("The summary came back empty. The model's reply:")
+        reply = (result.get("output") or "").strip()
+        st.text(reply or "The model did not add an explanation.")
+        _render_history()
+        st.stop()
 
     # ── Results ────────────────────────────────────────────────────────────
 
@@ -248,23 +284,5 @@ if run_btn and (transcript or "").strip():
             mime="text/markdown",
         )
 
-# ── Sidebar history (rendered after history.append so current run is visible) ──
-
-with st.sidebar:
-    if st.session_state.history:
-        st.divider()
-        st.subheader("🕒 Recent runs")
-        for i, run in enumerate(reversed(st.session_state.history[-5:])):
-            c = run["counts"]
-            total = sum(c.values())
-            with st.expander(f"{run['time']}  ·  {total} items", expanded=False):
-                st.caption(
-                    f"✅ {c['done']} done  "
-                    f"🔄 {c['in_progress']} in progress  "
-                    f"🚧 {c['blockers']} blockers  "
-                    f"📋 {c['actions']} actions"
-                )
-                st.caption(f"{run['iterations']} iterations · {run['elapsed']:.1f}s")
-                if st.button("Restore transcript", key=f"restore_{i}"):
-                    st.session_state["transcript_input"] = run["transcript"]
-                    st.rerun()
+# Rendered after history.append so the current run is visible.
+_render_history()

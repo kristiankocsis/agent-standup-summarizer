@@ -254,10 +254,6 @@ def run_agent(transcript: str, progress_callback=None) -> dict:
     try:
         final_state = _graph.invoke(initial_state)
 
-        # An empty summary is valid, so check for None and not for falsy.
-        if final_state.get("structured_output") is None:
-            raise RuntimeError("The agent finished without producing a summary.")
-
         # Extract text from the last assistant message
         last_content = final_state["messages"][-1]["content"]
         output_text = ""
@@ -268,6 +264,20 @@ def run_agent(transcript: str, progress_callback=None) -> dict:
                     break
         elif isinstance(last_content, str):
             output_text = last_content
+
+        # An empty summary is valid, so check for None and not for falsy. The
+        # model's text stays in the result, because it can explain why, for
+        # example when the input is not a standup.
+        if final_state.get("structured_output") is None:
+            error = "The agent finished without producing a summary."
+            if VERBOSE:
+                print(f"\n[error] {error}")
+            return {
+                "status": "error",
+                "error": error,
+                "output": output_text,
+                "transcript_length": len(transcript),
+            }
 
         result = {
             "status": "success",
