@@ -234,6 +234,75 @@ def test_run_agent_succeeds_on_a_normal_run():
     assert result["structured_output"]["done"] == ["API"]
 
 
+# ── Runs without a summary, and a finished summary ─────────────────────────
+
+def _format_call(**lists):
+    fields = {"done": [], "in_progress": [], "blockers": [], "actions": [], **lists}
+    return SimpleNamespace(type="tool_use", id="f1", name="format_output", input=fields)
+
+
+def _run_agent_with_replies(*replies):
+    orchestrator = iter(replies)
+    with patch.object(agent_module, "_client", _fake_client(lambda **kw: next(orchestrator))):
+        return run_agent("Alice: blocked on staging.")
+
+
+def test_run_agent_fails_when_model_ends_without_summary():
+    result = _run_agent_with_replies(_reply("end_turn", _text("Please paste a real standup.")))
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "without producing a summary" in result["error"]
+
+
+def test_run_agent_fails_at_step_limit_without_summary():
+    tool_call = SimpleNamespace(
+        type="tool_use", id="t1", name="extract_blockers", input={"transcript": "Alice"},
+    )
+    orchestrator = _fake_client(lambda **kw: _reply("tool_use", tool_call))
+    extraction = _fake_client(lambda **kw: _reply("end_turn", _text("{}")))
+    with patch.object(agent_module, "_client", orchestrator), \
+            patch.object(tools_module, "_client", extraction):
+        result = run_agent("Alice: blocked on staging.")
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "without producing a summary" in result["error"]
+
+
+def test_run_agent_keeps_summary_when_closing_reply_is_cut_off():
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("max_tokens", _text("Here is the summ")),
+    )
+    assert result["status"] == "success", f"status was {result['status']}: {result.get('error')}"
+    assert result["structured_output"]["done"] == ["API"]
+
+
+def test_run_agent_keeps_summary_when_closing_reply_is_refused():
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("refusal"),
+    )
+    assert result["status"] == "success", f"status was {result['status']}: {result.get('error')}"
+    assert result["structured_output"]["done"] == ["API"]
+
+
+def test_run_agent_fails_when_a_later_summary_call_is_cut_off():
+    # The first summary may be partial, so it must not pass as the final one.
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call(done=["API"])),
+        _reply("max_tokens", _format_call(done=["API", "Forms"])),
+    )
+    assert result["status"] == "error", f"status was {result['status']}"
+    assert "max_tokens" in result["error"]
+
+
+def test_run_agent_treats_an_empty_summary_as_a_summary():
+    result = _run_agent_with_replies(
+        _reply("tool_use", _format_call()),
+        _reply("end_turn", _text("Nothing to report.")),
+    )
+    assert result["status"] == "success", f"status was {result['status']}: {result.get('error')}"
+    assert result["structured_output"]["done"] == []
+
+
 # ── Plain runner (ASCII output for Windows cp1250 console) ─────────────────
 
 if __name__ == "__main__":

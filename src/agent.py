@@ -128,8 +128,12 @@ def call_llm(state: AgentState) -> dict:
               (f"  tools={tool_calls}" if tool_calls else ""))
 
     # tool_use is a normal stop here, unlike in the extraction calls. Stopping
-    # now also keeps a tool from running on a cut-off tool call.
-    if response.stop_reason not in ("end_turn", "tool_use"):
+    # now also keeps a tool from running on a cut-off tool call. An unfinished
+    # closing message is harmless once the summary exists, but an unfinished
+    # tool call is not: the summary may be an earlier, partial one.
+    unfinished = response.stop_reason not in ("end_turn", "tool_use")
+    has_tool_call = any(b.type == "tool_use" for b in response.content)
+    if unfinished and (state["structured_output"] is None or has_tool_call):
         raise LLMResponseIncomplete(
             f"The model's reply did not finish (stop_reason: {response.stop_reason}), "
             "so the summary would be incomplete."
@@ -249,6 +253,10 @@ def run_agent(transcript: str, progress_callback=None) -> dict:
 
     try:
         final_state = _graph.invoke(initial_state)
+
+        # An empty summary is valid, so check for None and not for falsy.
+        if final_state.get("structured_output") is None:
+            raise RuntimeError("The agent finished without producing a summary.")
 
         # Extract text from the last assistant message
         last_content = final_state["messages"][-1]["content"]
